@@ -1,0 +1,5 @@
+C:\GitRepo\RecipeAppCursor\obj\Debug\tizen10.0\RecipeApp.csproj.AssemblyReference.cache
+C:\GitRepo\RecipeAppCursor\obj\Debug\tizen10.0\RecipeApp.GeneratedMSBuildEditorConfig.editorconfig
+C:\GitRepo\RecipeAppCursor\obj\Debug\tizen10.0\RecipeApp.AssemblyInfoInputs.cache
+C:\GitRepo\RecipeAppCursor\obj\Debug\tizen10.0\RecipeApp.AssemblyInfo.cs
+C:\GitRepo\RecipeAppCursor\obj\Debug\tizen10.0\RecipeApp.csproj.CoreCompileInputs.cache

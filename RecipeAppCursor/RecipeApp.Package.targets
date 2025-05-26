@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TizenCreateTpkOnBuild>true</TizenCreateTpkOnBuild>
+    <TizenTpkSignature>$</TizenTpkSignature>
+    <PackageVersion>1.0.0</PackageVersion>
+    <PackageName>RecipeApp</PackageName>
+  </PropertyGroup>
+</Project> 
