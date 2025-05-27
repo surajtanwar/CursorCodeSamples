@@ -886,11 +886,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\GitRepo\\RecipeAppCursor\\RecipeApp.csproj",
+      "projectUniqueName": "C:\\GitRepo\\CursorCodeSamples\\RecipeAppCursor\\RecipeApp.csproj",
       "projectName": "RecipeApp",
-      "projectPath": "C:\\GitRepo\\RecipeAppCursor\\RecipeApp.csproj",
+      "projectPath": "C:\\GitRepo\\CursorCodeSamples\\RecipeAppCursor\\RecipeApp.csproj",
       "packagesPath": "C:\\Users\\suraj.tanwar\\.nuget\\packages\\",
-      "outputPath": "C:\\GitRepo\\RecipeAppCursor\\obj\\",
+      "outputPath": "C:\\GitRepo\\CursorCodeSamples\\RecipeAppCursor\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\suraj.tanwar\\AppData\\Roaming\\NuGet\\NuGet.Config"

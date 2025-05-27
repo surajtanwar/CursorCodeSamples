@@ -11,12 +11,16 @@ namespace RecipeApp
         private Window window;
         private View currentView;
 
-        protected override void OnCreate()
+        protected override async void OnCreate()
         {
             base.OnCreate();
             window = Window.Instance;
             window.BackgroundColor = Color.White;
-            // (All splash and main view logic has been moved to Views/SplashView.cs and Views/MainView.cs)
+            // Show splash screen
+            SetPage(new SplashView());
+            await Task.Delay(2000); // Wait for 2 seconds
+            // Show main screen
+            SetPage(new MainView());
         }
 
         private async void ShowSplashPage()

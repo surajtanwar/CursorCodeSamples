@@ -11,7 +11,7 @@ namespace RecipeApp.Views
             BackgroundColor = Color.White;
             Position = new Position(0, 0);
             PositionUsesPivotPoint = true;
-            PivotPoint = PivotPoint.TopLeft;
+            //PivotPoint = PivotPoint.TopLeft;
 
             // Rectangle background
             ImageView rectangle = new ImageView()
