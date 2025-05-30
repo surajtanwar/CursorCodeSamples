@@ -13,16 +13,22 @@
         "packagesPath": "C:\\Users\\suraj.tanwar\\.nuget\\packages\\",
         "outputPath": "C:\\GitRepo\\CursorCodeSamples\\RecipeAppCursor\\obj\\",
         "projectStyle": "PackageReference",
+        "crossTargeting": true,
         "configFilePaths": [
           "C:\\Users\\suraj.tanwar\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
-          "tizen10.0"
+          "tizen10.0",
+          "tizen7.0"
         ],
         "sources": {
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
+          "tizen70": {
+            "targetAlias": "tizen7.0",
+            "projectReferences": {}
+          },
           "tizen10.0": {
             "targetAlias": "tizen10.0",
             "projectReferences": {}
@@ -41,6 +47,19 @@
         "SdkAnalysisLevel": "9.0.200"
       },
       "frameworks": {
+        "tizen70": {
+          "targetAlias": "tizen7.0",
+          "dependencies": {
+            "Tizen.NET": {
+              "include": "Compile, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[10.0.0.17508, )",
+              "autoReferenced": true
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203\\RuntimeIdentifierGraph.json"
+        },
         "tizen10.0": {
           "targetAlias": "tizen10.0",
           "dependencies": {

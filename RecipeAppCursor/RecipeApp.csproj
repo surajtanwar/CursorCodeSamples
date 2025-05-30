@@ -2,7 +2,7 @@
 <Project Sdk="Tizen.NET.Sdk/1.1.9">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>tizen10.0</TargetFramework>
+    <TargetFrameworks>tizen10.0;tizen7.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="res\images\splash\Rectangle.png" />

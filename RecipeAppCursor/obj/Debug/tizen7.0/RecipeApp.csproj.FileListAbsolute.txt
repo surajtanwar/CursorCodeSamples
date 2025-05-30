@@ -1,0 +1,11 @@
+C:\GitRepo\CursorCodeSamples\RecipeAppCursor\bin\Debug\tizen7.0\RecipeApp.deps.json
+C:\GitRepo\CursorCodeSamples\RecipeAppCursor\bin\Debug\tizen7.0\RecipeApp.dll
+C:\GitRepo\CursorCodeSamples\RecipeAppCursor\bin\Debug\tizen7.0\RecipeApp.pdb
+C:\GitRepo\CursorCodeSamples\RecipeAppCursor\obj\Debug\tizen7.0\RecipeApp.csproj.AssemblyReference.cache
+C:\GitRepo\CursorCodeSamples\RecipeAppCursor\obj\Debug\tizen7.0\RecipeApp.GeneratedMSBuildEditorConfig.editorconfig
+C:\GitRepo\CursorCodeSamples\RecipeAppCursor\obj\Debug\tizen7.0\RecipeApp.AssemblyInfoInputs.cache
+C:\GitRepo\CursorCodeSamples\RecipeAppCursor\obj\Debug\tizen7.0\RecipeApp.AssemblyInfo.cs
+C:\GitRepo\CursorCodeSamples\RecipeAppCursor\obj\Debug\tizen7.0\RecipeApp.csproj.CoreCompileInputs.cache
+C:\GitRepo\CursorCodeSamples\RecipeAppCursor\obj\Debug\tizen7.0\RecipeApp.sourcelink.json
+C:\GitRepo\CursorCodeSamples\RecipeAppCursor\obj\Debug\tizen7.0\RecipeApp.dll
+C:\GitRepo\CursorCodeSamples\RecipeAppCursor\obj\Debug\tizen7.0\RecipeApp.pdb

@@ -93,11 +93,10 @@ namespace RecipeApp.Views
             {
                 Size = new Size(375 * scaleX, 221 * scaleY),
                 Position = new Position(77 * scaleX, 126 * scaleY),
-                ScrollingDirection = ScrollableBase.Direction.Horizontal,
             };
-            var imageContainer = new View()
+            var container = new View()
             {
-                Size = new Size(375 * scaleX * 3, 221 * scaleY), // 3 images wide
+                Size = new Size(375 * scaleX * 3, 221 * scaleY),
                 Layout = new LinearLayout()
                 {
                     LinearOrientation = LinearLayout.Orientation.Horizontal,
@@ -116,9 +115,9 @@ namespace RecipeApp.Views
                     ResourceUrl = GetResourcePath($"images/home/{carouselImages[i]}"),
                     Size = new Size(375 * scaleX, 221 * scaleY),
                 };
-                imageContainer.Add(img);
+                container.Add(img);
             }
-            carousel.Add(imageContainer);
+            carousel.Add(container);
             Add(carousel);
 
             // Heart button
