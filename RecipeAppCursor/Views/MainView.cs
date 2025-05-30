@@ -16,7 +16,6 @@ namespace RecipeApp.Views
             // Scale factors
             float scaleX = 720f / 375f;
             float scaleY = 1280f / 667f;
-            float fontScale = 1.33f; // 1pt = 1.33px
 
             Size = new Size(720, 1280);
             BackgroundColor = Color.White;
@@ -41,7 +40,7 @@ namespace RecipeApp.Views
             Add(new TextLabel()
             {
                 Text = "POPULAR RECIPES",
-                PointSize = 18 * fontScale,
+                PointSize = 10,
                 TextColor = new Color(0.92f, 0.34f, 0.34f, 1), // #eb5757
                 FontFamily = "Roboto-Bold",
                 HorizontalAlignment = HorizontalAlignment.Center,
@@ -53,7 +52,7 @@ namespace RecipeApp.Views
             Add(new TextLabel()
             {
                 Text = "APPETIZERS",
-                PointSize = 13 * fontScale,
+                PointSize = 7,
                 TextColor = new Color(0.45f, 0.45f, 0.45f, 1), // #737373
                 FontFamily = "Roboto-Regular",
                 Position = new Position((720 / 2) - 122.5f * scaleX, 84 * scaleY),
@@ -63,7 +62,7 @@ namespace RecipeApp.Views
             Add(new TextLabel()
             {
                 Text = "ENTREES",
-                PointSize = 13 * fontScale,
+                PointSize = 7,
                 TextColor = Color.Black,
                 FontFamily = "Roboto-Medium",
                 Position = new Position((720 / 2) - 17.5f * scaleX, 84 * scaleY),
@@ -73,7 +72,7 @@ namespace RecipeApp.Views
             Add(new TextLabel()
             {
                 Text = "DESSERT",
-                PointSize = 13 * fontScale,
+                PointSize = 7,
                 TextColor = new Color(0.45f, 0.45f, 0.45f, 1),
                 FontFamily = "Roboto-Regular",
                 Position = new Position((720 / 2) + 67.5f * scaleX, 84 * scaleY),
@@ -89,25 +88,38 @@ namespace RecipeApp.Views
                 Position = new Position((720 / 2) - 16.5f * scaleX, 106 * scaleY),
             });
 
-            // Recipe card background
-            Add(new ImageView()
+            // Carousel of images (replace static rectangle and mask images)
+            var carousel = new ScrollView()
             {
-                ResourceUrl = GetResourcePath("images/home/rectangle0.png"),
-                Size = new Size(221 * scaleX, 221 * scaleY),
+                Size = new Size(375 * scaleX, 221 * scaleY),
                 Position = new Position(77 * scaleX, 126 * scaleY),
-            });
-
-            // Mask groups (side images)
-            Add(new ImageView()
+                ScrollingDirection = ScrollableBase.Direction.Horizontal,
+            };
+            var imageContainer = new View()
             {
-                ResourceUrl = GetResourcePath("images/home/mask-group0.svg"),
-                Position = new Position(308 * scaleX, 136 * scaleY),
-            });
-            Add(new ImageView()
+                Size = new Size(375 * scaleX * 3, 221 * scaleY), // 3 images wide
+                Layout = new LinearLayout()
+                {
+                    LinearOrientation = LinearLayout.Orientation.Horizontal,
+                    CellPadding = new Size2D(0, 0),
+                }
+            };
+            string[] carouselImages = {
+                "rectangle0.png",
+                "appetizer.png",
+                "dessert.png"
+            };
+            for (int i = 0; i < carouselImages.Length; i++)
             {
-                ResourceUrl = GetResourcePath("images/home/mask-group1.svg"),
-                Position = new Position(-133 * scaleX, 136 * scaleY),
-            });
+                var img = new ImageView()
+                {
+                    ResourceUrl = GetResourcePath($"images/home/{carouselImages[i]}"),
+                    Size = new Size(375 * scaleX, 221 * scaleY),
+                };
+                imageContainer.Add(img);
+            }
+            carousel.Add(imageContainer);
+            Add(carousel);
 
             // Heart button
             Add(new ImageView()
@@ -137,7 +149,7 @@ namespace RecipeApp.Views
             Add(new TextLabel()
             {
                 Text = "Prime Rib Roast",
-                PointSize = 18 * fontScale,
+                PointSize = 10,
                 TextColor = new Color(0.10f, 0.35f, 0.49f, 1), // #19597d
                 FontFamily = "Roboto-Bold",
                 Position = new Position(123 * scaleX, 390 * scaleY),
@@ -155,7 +167,7 @@ namespace RecipeApp.Views
             Add(new TextLabel()
             {
                 Text = "5HR",
-                PointSize = 14 * fontScale,
+                PointSize = 7,
                 TextColor = Color.Black,
                 FontFamily = "Roboto-Regular",
                 Position = new Position(103 * scaleX, 427 * scaleY),
@@ -171,7 +183,7 @@ namespace RecipeApp.Views
             Add(new TextLabel()
             {
                 Text = "685",
-                PointSize = 14 * fontScale,
+                PointSize = 7,
                 TextColor = Color.Black,
                 FontFamily = "Roboto-Regular",
                 Position = new Position(189 * scaleX, 427 * scaleY),
@@ -187,7 +199,7 @@ namespace RecipeApp.Views
             Add(new TextLabel()
             {
                 Text = "107",
-                PointSize = 14 * fontScale,
+                PointSize = 7,
                 TextColor = Color.Black,
                 FontFamily = "Roboto-Regular",
                 Position = new Position(268 * scaleX, 427 * scaleY),
@@ -199,7 +211,7 @@ namespace RecipeApp.Views
             Add(new TextLabel()
             {
                 Text = "The Prime Rib Roast is a classic and tender cut of beef taken from the rib primal cut. Learn how to make the perfect prime rib roast to serve your family and friends. Check out What's Cooking America's award-winning Classic Prime Rib Roast recipe and photo tutorial to help you make the Perfect Prime Rib Roast.",
-                PointSize = 14 * fontScale,
+                PointSize = 8,
                 TextColor = new Color(0.46f, 0.46f, 0.46f, 1), // #757575
                 FontFamily = "Roboto-Regular",
                 Position = new Position(21 * scaleX, 462 * scaleY),

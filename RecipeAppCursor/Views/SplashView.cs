@@ -16,7 +16,7 @@ namespace RecipeApp.Views
             Size = new Size(720, 1280);
             BackgroundColor = Color.White;
             Position = new Position(0, 0);
-            PositionUsesPivotPoint = true;
+            PositionUsesPivotPoint = false;
             //PivotPoint = PivotPoint.TopLeft;
 
             // Background image with red overlay
