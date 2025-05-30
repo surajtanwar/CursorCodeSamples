@@ -1,6 +1,7 @@
 using Tizen.NUI;
 using Tizen.NUI.BaseComponents;
 using Tizen.Applications;
+using System;
 
 namespace RecipeApp.Views
 {
@@ -89,36 +90,73 @@ namespace RecipeApp.Views
             });
 
             // Carousel of images (replace static rectangle and mask images)
-            var carousel = new ScrollView()
-            {
-                Size = new Size(375 * scaleX, 221 * scaleY),
-                Position = new Position(77 * scaleX, 126 * scaleY),
-            };
-            var container = new View()
-            {
-                Size = new Size(375 * scaleX * 3, 221 * scaleY),
-                Layout = new LinearLayout()
-                {
-                    LinearOrientation = LinearLayout.Orientation.Horizontal,
-                    CellPadding = new Size2D(0, 0),
-                }
-            };
+            float carouselWidth = 375 * scaleX;
+            float carouselHeight = 221 * scaleY;
             string[] carouselImages = {
                 "rectangle0.png",
                 "appetizer.png",
                 "dessert.png"
             };
-            for (int i = 0; i < carouselImages.Length; i++)
+            int carouselCount = carouselImages.Length;
+            int currentIndex = 0;
+            float startPanX = 0;
+            float startContainerX = 0;
+
+            var carouselClip = new View()
+            {
+                Size = new Size(carouselWidth, carouselHeight),
+                Position = new Position(77 * scaleX, 126 * scaleY),
+                ClippingMode = ClippingModeType.ClipChildren,
+            };
+            var carouselContainer = new View()
+            {
+                Size = new Size(carouselWidth * carouselCount, carouselHeight),
+                Position = new Position(0, 0),
+            };
+            for (int i = 0; i < carouselCount; i++)
             {
                 var img = new ImageView()
                 {
                     ResourceUrl = GetResourcePath($"images/home/{carouselImages[i]}"),
-                    Size = new Size(375 * scaleX, 221 * scaleY),
+                    Size = new Size(carouselWidth, carouselHeight),
+                    Position = new Position(i * carouselWidth, 0),
                 };
-                container.Add(img);
+                carouselContainer.Add(img);
             }
-            carousel.Add(container);
-            Add(carousel);
+            carouselClip.Add(carouselContainer);
+            Add(carouselClip);
+
+            // Pan gesture for horizontal scrolling
+            var pan = new PanGestureDetector();
+            pan.Attach(carouselClip);
+            pan.Detected += (object sender, PanGestureDetector.DetectedEventArgs e) =>
+            {
+                var gesture = e.PanGesture;
+                if (gesture.State == Gesture.StateType.Started)
+                {
+                    startPanX = gesture.Position.X;
+                    startContainerX = carouselContainer.PositionX;
+                }
+                else if (gesture.State == Gesture.StateType.Continuing)
+                {
+                    float deltaX = gesture.Position.X - startPanX;
+                    float newX = startContainerX + deltaX;
+                    // Clamp so you can't scroll past first/last
+                    newX = Math.Min(0, Math.Max(-carouselWidth * (carouselCount - 1), newX));
+                    carouselContainer.PositionX = newX;
+                }
+                else if (gesture.State == Gesture.StateType.Finished || gesture.State == Gesture.StateType.Cancelled)
+                {
+                    // Snap to nearest image
+                    float nearest = (float)Math.Round(carouselContainer.PositionX / -carouselWidth);
+                    nearest = Math.Max(0, Math.Min(carouselCount - 1, nearest));
+                    currentIndex = (int)nearest;
+                    // Animate to snap
+                    var anim = new Animation(200);
+                    anim.AnimateTo(carouselContainer, "PositionX", -currentIndex * carouselWidth);
+                    anim.Play();
+                }
+            };
 
             // Heart button
             Add(new ImageView()
