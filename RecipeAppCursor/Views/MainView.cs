@@ -21,6 +21,20 @@ namespace RecipeApp.Views
             Size = new Size(720, 1280);
             BackgroundColor = Color.White;
 
+            // Description label (below carousel) - declare first
+            var descriptionLabel = new TextLabel()
+            {
+                Text = "", // Will be set in UpdateDescription
+                PointSize = 8,
+                TextColor = new Color(0.46f, 0.46f, 0.46f, 1), // #757575
+                FontFamily = "Roboto-Regular",
+                Position = new Position(21 * scaleX, (126 + 221 + 20) * scaleY),
+                Size = new Size(335 * scaleX, 120 * scaleY),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                MultiLine = true,
+            };
+            Add(descriptionLabel);
+
             // Tab data
             string[] tabNames = { "APPETIZERS", "ENTREES", "DESSERT" };
             int selectedTab = 1; // Default to ENTREES
@@ -102,6 +116,7 @@ namespace RecipeApp.Views
                         underline.PositionX = tabWidth * selectedTab + (tabWidth - underline.SizeWidth) / 2;
                         // Update carousel content
                         UpdateCarousel();
+                        UpdateDescription();
                     }
                     return false;
                 };
@@ -110,6 +125,18 @@ namespace RecipeApp.Views
             }
             Add(tabBar);
             Add(underline);
+
+            void UpdateDescription()
+            {
+                if (recipes[selectedTab].Length > 0)
+                {
+                    descriptionLabel.Text = recipes[selectedTab][currentIndex].Description;
+                }
+                else
+                {
+                    descriptionLabel.Text = "";
+                }
+            }
 
             void UpdateCarousel()
             {
@@ -121,6 +148,7 @@ namespace RecipeApp.Views
                 }
                 carouselCount = recipes[selectedTab].Length;
                 currentIndex = 0;
+                UpdateDescription();
                 carouselClip = new View()
                 {
                     Size = new Size(carouselAreaWidth, carouselAreaHeight),
@@ -274,6 +302,7 @@ namespace RecipeApp.Views
                         var anim = new Animation(200);
                         anim.AnimateTo(carouselContainer, "PositionX", -currentIndex * carouselAreaWidth);
                         anim.Play();
+                        UpdateDescription();
                     }
                 };
             }
