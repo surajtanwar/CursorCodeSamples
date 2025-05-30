@@ -9,3 +9,9 @@ C:\GitRepo\CursorCodeSamples\RecipeAppCursor\obj\Debug\tizen10.0\RecipeApp.Assem
 C:\GitRepo\CursorCodeSamples\RecipeAppCursor\obj\Debug\tizen10.0\RecipeApp.AssemblyInfo.cs
 C:\GitRepo\CursorCodeSamples\RecipeAppCursor\obj\Debug\tizen10.0\RecipeApp.csproj.CoreCompileInputs.cache
 C:\GitRepo\CursorCodeSamples\RecipeAppCursor\obj\Debug\tizen10.0\RecipeApp.sourcelink.json
+C:\GitRepo\CursorCodeSamples\RecipeAppCursor\bin\Debug\tizen10.0\RecipeApp.deps.json
+C:\GitRepo\CursorCodeSamples\RecipeAppCursor\bin\Debug\tizen10.0\RecipeApp.dll
+C:\GitRepo\CursorCodeSamples\RecipeAppCursor\bin\Debug\tizen10.0\RecipeApp.pdb
+C:\GitRepo\CursorCodeSamples\RecipeAppCursor\obj\Debug\tizen10.0\XamlC.stamp
+C:\GitRepo\CursorCodeSamples\RecipeAppCursor\obj\Debug\tizen10.0\RecipeApp.dll
+C:\GitRepo\CursorCodeSamples\RecipeAppCursor\obj\Debug\tizen10.0\RecipeApp.pdb
