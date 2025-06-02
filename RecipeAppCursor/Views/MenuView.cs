@@ -38,7 +38,7 @@ namespace RecipeApp.Views
             Add(menuIcon);
 
             // Menu items (individual labels)
-            float fontPx = 20f * scaleX; // scale font px
+            float fontPx = 16f;
             float fontPt = fontPx / 1.33f; // convert px to pt
             int itemSpacing = (int)(42 * scaleY); // vertical spacing between items
             int firstItemY = (int)(71 * scaleY);

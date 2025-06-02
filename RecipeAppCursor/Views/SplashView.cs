@@ -10,6 +10,8 @@ namespace RecipeApp.Views
         {
             return Application.Current.DirectoryInfo.Resource + relativePath;
         }
+        float scaleX = 720f / 375f;
+        float scaleY = 1280f / 667f;
 
         public SplashView()
         {
@@ -32,8 +34,8 @@ namespace RecipeApp.Views
             ImageView group = new ImageView()
             {
                 ResourceUrl = GetResourcePath("images/splash/Group.png"),
-                Size = new Size(320, 320), // Large and centered
-                Position = new Position((720-320)/2, 180),
+                Size = new Size(195*scaleX, 208*scaleY), // Large and centered
+                Position = new Position((720-320)/2, 111*scaleY),
             };
             Add(group);
 
@@ -41,8 +43,8 @@ namespace RecipeApp.Views
             ImageView group2 = new ImageView()
             {
                 ResourceUrl = GetResourcePath("images/splash/Group_2.png"),
-                Size = new Size(320, 120), // Wide and centered
-                Position = new Position((720-320)/2, 540),
+                Size = new Size(209*scaleX, 200*scaleY), // Wide and centered
+                Position = new Position((720-320)/2, 365*scaleY),
             };
             Add(group2);
         }
