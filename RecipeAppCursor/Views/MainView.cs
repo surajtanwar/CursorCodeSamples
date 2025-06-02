@@ -28,8 +28,8 @@ namespace RecipeApp.Views
                 PointSize = 8,
                 TextColor = new Color(0.46f, 0.46f, 0.46f, 1), // #757575
                 FontFamily = "Roboto-Regular",
-                Position = new Position(21 * scaleX, (126 + 221 + 20) * scaleY),
-                Size = new Size(335 * scaleX, 462 * scaleY),
+                Position = new Position(21 * scaleX, 462 * scaleY),
+                Size = new Size(335 * scaleX, 120 * scaleY),
                 HorizontalAlignment = HorizontalAlignment.Center,
                 MultiLine = true,
             };

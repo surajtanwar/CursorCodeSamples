@@ -16,11 +16,14 @@ namespace RecipeApp.Views
             Size = new Size(720, 1280);
             BackgroundColor = Color.White;
 
-            // Red rectangle background (320px wide)
+            float scaleX = 720f / 375f;
+            float scaleY = 1280f / 667f;
+
+            // Red rectangle background (scaled to match menu.png)
             var rectangle = new View()
             {
                 BackgroundColor = new Color(0.92f, 0.34f, 0.34f, 1), // #eb5757
-                Size = new Size(426, 1280), // 320px * 1.33 = 426pt
+                Size = new Size(320 * scaleX, 1280),
                 Position = new Position(0, 0),
             };
             Add(rectangle);
@@ -29,16 +32,16 @@ namespace RecipeApp.Views
             var menuIcon = new ImageView()
             {
                 ResourceUrl = GetResourcePath("images/menu/btn-menu0.svg"),
-                Size = new Size(32, 24), // 24x18px * 1.33
-                Position = new Position(453, 13), // 340px * 1.33, 10px * 1.33
+                Size = new Size(24 * scaleX, 18 * scaleY),
+                Position = new Position(340 * scaleX, 10 * scaleY),
             };
             Add(menuIcon);
 
             // Menu items (individual labels)
-            float fontPx = 20f; // px from CSS
+            float fontPx = 20f * scaleX; // scale font px
             float fontPt = fontPx / 1.33f; // convert px to pt
-            int itemSpacing = 56; // vertical spacing between items (42px * 1.33)
-            int firstItemY = 95; // 71px * 1.33
+            int itemSpacing = (int)(42 * scaleY); // vertical spacing between items
+            int firstItemY = (int)(71 * scaleY);
             string[] items = { "POPULAR RECIPES", "SAVED RECIPES", "SHOPPING LIST", "SETTINGS" };
             TextLabel[] menuLabels = new TextLabel[items.Length];
             for (int i = 0; i < items.Length; i++)
@@ -50,8 +53,8 @@ namespace RecipeApp.Views
                     TextColor = Color.White,
                     FontFamily = "Roboto-Medium",
                     FontStyle = new PropertyMap().Add("weight", new PropertyValue("500")),
-                    Position = new Position(40, firstItemY + i * itemSpacing), // 30px * 1.33
-                    Size = new Size(320, 40),
+                    Position = new Position(30 * scaleX, firstItemY + i * itemSpacing),
+                    Size = new Size(320 * scaleX, 40 * scaleY),
                     MultiLine = false,
                 };
                 Add(label);
@@ -62,8 +65,8 @@ namespace RecipeApp.Views
             var line = new View()
             {
                 BackgroundColor = Color.White,
-                Size = new Size(5, 30), // 5px wide, 30px tall
-                Position = new Position(21, firstItemY + 5), // 16px * 1.33, align with first item
+                Size = new Size(5 * scaleX, 30 * scaleY),
+                Position = new Position(16 * scaleX, firstItemY + 5 * scaleY),
             };
             Add(line);
 
@@ -71,9 +74,9 @@ namespace RecipeApp.Views
             var avatar = new ImageView()
             {
                 ResourceUrl = GetResourcePath("images/menu/ellipse0.png"),
-                Size = new Size(61, 61), // 46px * 1.33
-                Position = new Position(39, 734), // 29px * 1.33, 552px * 1.33
-                CornerRadius = 30.5f,
+                Size = new Size(46 * scaleX, 46 * scaleY),
+                Position = new Position(29 * scaleX, 552 * scaleY),
+                CornerRadius = 23 * scaleX,
                 BackgroundColor = Color.White,
             };
             Add(avatar);
@@ -86,8 +89,8 @@ namespace RecipeApp.Views
                 TextColor = Color.White,
                 FontFamily = "Roboto-Medium",
                 FontStyle = new PropertyMap().Add("weight", new PropertyValue("500")),
-                Position = new Position(40, 820), // 30px * 1.33, 616px * 1.33
-                Size = new Size(400, 40),
+                Position = new Position(30 * scaleX, 616 * scaleY),
+                Size = new Size(320 * scaleX, 40 * scaleY),
             };
             Add(userName);
         }
