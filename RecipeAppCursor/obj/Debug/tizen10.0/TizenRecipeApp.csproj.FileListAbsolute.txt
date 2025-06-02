@@ -15,7 +15,9 @@ C:\GitRepo\CursorCodeSamples\RecipeAppCursor\bin\Debug\tizen10.0\tpkroot\res\ima
 C:\GitRepo\CursorCodeSamples\RecipeAppCursor\bin\Debug\tizen10.0\tpkroot\res\images\home\icons2.svg
 C:\GitRepo\CursorCodeSamples\RecipeAppCursor\bin\Debug\tizen10.0\tpkroot\res\images\home\mask-group0.svg
 C:\GitRepo\CursorCodeSamples\RecipeAppCursor\bin\Debug\tizen10.0\tpkroot\res\images\home\mask-group1.svg
+C:\GitRepo\CursorCodeSamples\RecipeAppCursor\bin\Debug\tizen10.0\tpkroot\res\images\home\maskgroup0.png
 C:\GitRepo\CursorCodeSamples\RecipeAppCursor\bin\Debug\tizen10.0\tpkroot\res\images\home\maskgroup0.svg
+C:\GitRepo\CursorCodeSamples\RecipeAppCursor\bin\Debug\tizen10.0\tpkroot\res\images\home\maskgroup1.png
 C:\GitRepo\CursorCodeSamples\RecipeAppCursor\bin\Debug\tizen10.0\tpkroot\res\images\home\maskgroup1.svg
 C:\GitRepo\CursorCodeSamples\RecipeAppCursor\bin\Debug\tizen10.0\tpkroot\res\images\home\rectangle0.png
 C:\GitRepo\CursorCodeSamples\RecipeAppCursor\bin\Debug\tizen10.0\tpkroot\res\images\home\star0.svg

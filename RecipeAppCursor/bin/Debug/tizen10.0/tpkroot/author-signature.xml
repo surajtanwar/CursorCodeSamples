@@ -54,9 +54,17 @@
       <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512" />
       <DigestValue>piCsAAkLonaHmxGElI7Z+CW5OntYDkdlczxSFzOdBCIOeiL6cW9Um5pm+vPEFD7TpJxpVhx7LIBq2pGr1tvoVA==</DigestValue>
     </Reference>
+    <Reference URI="res%2Fimages%2Fhome%2Fmaskgroup1.png">
+      <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512" />
+      <DigestValue>V5LJMJ7lJNhG8Lrf7l3cfc96h5HCfk+9EA1QUOAm+Z7+TIsquVUnIgnadpPfdRgUzea6OQxOqlxU3xVLd3ER+A==</DigestValue>
+    </Reference>
     <Reference URI="res%2Fimages%2Fhome%2Fmaskgroup0.svg">
       <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512" />
       <DigestValue>RWR60GhLF2AEoHMpBZyHZLr3UgmfxHkiv1zf7ZmnSUgjuKPW6NtXYriiYewofehpLf4/Uh/Dx21ouMpAf+5Eqg==</DigestValue>
+    </Reference>
+    <Reference URI="res%2Fimages%2Fhome%2Fmaskgroup0.png">
+      <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512" />
+      <DigestValue>2Id4ALuWP/AlaIalCsgSzOmXD59LhMDsEeMcjZ73FHSu49WWNwwqqoFKbwQgTGYO2n/3aR70Pp3gB0W2WsIvUA==</DigestValue>
     </Reference>
     <Reference URI="res%2Fimages%2Fhome%2Fmask-group1.svg">
       <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512" />
@@ -120,11 +128,11 @@
     </Reference>
     <Reference URI="bin%2FRecipeApp.pdb">
       <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512" />
-      <DigestValue>Nm11EQxiT83DRbjMhnh5PXwVx0TJnLRFt3nLvWt3WaNs7QrI0YY0ujattovkMjNrlZ9Rbuz58PuMEqnIMQEHgA==</DigestValue>
+      <DigestValue>xG0mmNIhPO5t1YQgJpKAMrVS5xLPpCDdxq/mdLWQ/2s2+lukj1xrUKDoh+e/LXsjBKwTUAzUTOe+jAgwKx+V/A==</DigestValue>
     </Reference>
     <Reference URI="bin%2FRecipeApp.dll">
       <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512" />
-      <DigestValue>Lq0jZQJEBRbI3O1sgezd77F1fNRYtbJ93xatCvoedXK7uxdx3GE3goreB2RWDNiqefPSOcS+z6Isr/rP5+b0ig==</DigestValue>
+      <DigestValue>0/e047UO+y16+GawGEHGUsP9dPeX47uOT3tz5GZqO6+XDHui6Z81JQNy+GdZIdt616I+BskRF7AUqBaUrUiSrQ==</DigestValue>
     </Reference>
     <Reference URI="#prop">
       <Transforms>
@@ -135,9 +143,9 @@
     </Reference>
   </SignedInfo>
   <SignatureValue>
-hxpnkcqMaHzx/9/zkfmpjgoQPHcG8US+bDg8wOtbVkM8F9y88rzKS8Z3aup9+/bQmqPhsyxyFuQ2
-XdNBhlrCIKLBQ2v7uwAAqu3jlivsA5G3UvvYW+B7GPn0wU6i70ZmiJgN0Y+x4/rIspPEq/MJDhg1
-uVkqkB4OOkvsPQt7GM8=
+lBEO8fC/zMV24n1B+zcy39bAt4g5LaP3xu30Mjk+mSSu3otfVPxb2xZk2qLn/6lgAGU6sXER9bnE
+65pejLDL551P8Gmf45u5VbG2MpHmm7cRv/M1Wzs0/7qY3Szj4s2QkkFkaKwQzW/V50BV6BH5PyCX
+TjqHGTHHcnwwhuHto6w=
 </SignatureValue>
   <KeyInfo>
     <X509Data>
