@@ -29,7 +29,7 @@ namespace RecipeApp.Views
                 TextColor = new Color(0.46f, 0.46f, 0.46f, 1), // #757575
                 FontFamily = "Roboto-Regular",
                 Position = new Position(21 * scaleX, (126 + 221 + 20) * scaleY),
-                Size = new Size(335 * scaleX, 120 * scaleY),
+                Size = new Size(335 * scaleX, 462 * scaleY),
                 HorizontalAlignment = HorizontalAlignment.Center,
                 MultiLine = true,
             };
@@ -223,7 +223,7 @@ namespace RecipeApp.Views
                     card.Add(new TextLabel()
                     {
                         Text = recipe.Time,
-                        PointSize = 8,
+                        PointSize = 7,
                         TextColor = Color.Black,
                         FontFamily = "Roboto-Regular",
                         Position = new Position(62 * scaleX, infoY),
@@ -240,7 +240,7 @@ namespace RecipeApp.Views
                     card.Add(new TextLabel()
                     {
                         Text = recipe.Likes,
-                        PointSize = 8,
+                        PointSize = 7,
                         TextColor = Color.Black,
                         FontFamily = "Roboto-Regular",
                         Position = new Position(142 * scaleX, infoY),
@@ -257,7 +257,7 @@ namespace RecipeApp.Views
                     card.Add(new TextLabel()
                     {
                         Text = recipe.Comments,
-                        PointSize = 8,
+                        PointSize = 7,
                         TextColor = Color.Black,
                         FontFamily = "Roboto-Regular",
                         Position = new Position(222 * scaleX, infoY),
