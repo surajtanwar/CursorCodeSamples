@@ -69,6 +69,7 @@ namespace RecipeApp.Views
             tabWidth = ScreenWidth / tabNames.Length;
             CreateDescriptionLabel(scaleX, scaleY);
             CreateTabBar(scaleX, scaleY);
+            CreateTabBarUI(scaleX, scaleY);
             CreateCarousel(scaleX, scaleY);
             CreateMenuButton(scaleX, scaleY);
             CreateSearchButton(scaleX, scaleY);
