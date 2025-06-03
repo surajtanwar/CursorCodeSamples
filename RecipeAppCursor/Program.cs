@@ -16,11 +16,12 @@ namespace RecipeApp
             base.OnCreate();
             window = Window.Instance;
             window.BackgroundColor = Color.White;
+            RecipeApp.NavigationController.Instance.Initialize(window);
             // Show splash screen
-            SetPage(new SplashView());
+            RecipeApp.NavigationController.Instance.ShowView(new SplashView());
             await Task.Delay(2000); // Wait for 2 seconds
             // Show main screen
-            SetPage(new MainView());
+            RecipeApp.NavigationController.Instance.ShowView(new MainView());
         }
 
         private async void ShowSplashPage()

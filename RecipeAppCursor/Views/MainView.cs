@@ -317,28 +317,11 @@ namespace RecipeApp.Views
             };
             Add(menuButton);
 
-            // Menu overlay logic
-            RecipeApp.Views.MenuView menuView = null;
             menuButton.TouchEvent += (s, e) =>
             {
                 if (e.Touch.GetState(0) == PointStateType.Up)
                 {
-                    if (menuView == null)
-                    {
-                        menuView = new RecipeApp.Views.MenuView();
-                        Add(menuView);
-                        // Optionally, add a touch event to menuView to close it when clicking outside the red area
-                        menuView.TouchEvent += (ms, me) =>
-                        {
-                            if (me.Touch.GetState(0) == PointStateType.Up)
-                            {
-                                Remove(menuView);
-                                menuView.Dispose();
-                                menuView = null;
-                            }
-                            return false;
-                        };
-                    }
+                    RecipeApp.NavigationController.Instance.ShowView(new RecipeApp.Views.MenuView());
                 }
                 return false;
             };

@@ -93,6 +93,16 @@ namespace RecipeApp.Views
                 Size = new Size(320 * scaleX, 40 * scaleY),
             };
             Add(userName);
+
+            // Add a touch event to close the menu and go back
+            this.TouchEvent += (s, e) =>
+            {
+                if (e.Touch.GetState(0) == PointStateType.Up)
+                {
+                    RecipeApp.NavigationController.Instance.Back();
+                }
+                return false;
+            };
         }
     }
 } 
