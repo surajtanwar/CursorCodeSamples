@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <PropertyGroup>
+    <TizenManifestFile>tizen-manifest.xml</TizenManifestFile>
+    <PackageId>org.tizen.example.RecipeApp</PackageId>
+    <PackageVersion>1.0.0</PackageVersion>
+    <Author>Recipe App Developer</Author>
+    <Description>A sample recipe application for Tizen</Description>
+  </PropertyGroup>
+</Project> 

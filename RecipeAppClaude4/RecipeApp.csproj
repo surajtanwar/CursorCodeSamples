@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Tizen.NET.Sdk/1.1.9">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>tizen10.0;tizen7.0</TargetFrameworks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="res\images\splash\Rectangle.png" />
+    <Content Include="res\images\splash\Group.png" />
+    <Content Include="res\images\splash\Group_2.png" />
+  </ItemGroup>
+  
+  <Import Project="RecipeApp.Package.targets" />
+</Project> 

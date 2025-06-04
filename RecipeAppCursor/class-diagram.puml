@@ -1,0 +1,134 @@
+@startuml
+
+' Root namespace
+package RecipeApp {
+  class NavigationController {
+    - static NavigationController _instance
+    - Stack<View> _viewStack
+    - Window _window
+    + static NavigationController Instance
+    + void Initialize(Window window)
+    + void ShowView(View view)
+    + void HideView()
+    + void Back()
+  }
+
+  class Program {
+    - Window window
+    - View currentView
+    + void OnCreate()
+    + void ShowSplashPage()
+    + void ShowMainPage()
+    + void SetPage(View newPage)
+    + static void Main(string[] args)
+  }
+}
+
+' Views namespace
+package RecipeApp.Views {
+  class MainView {
+    ' Fields
+    - const int BaseWidth
+    - const int BaseHeight
+    - const int ScreenWidth
+    - const int ScreenHeight
+    - const float TabUnderlineWidth
+    - const float TabBarHeight
+    - const float CarouselCardWidth
+    - const float CarouselCardHeight
+    - const float CarouselAreaWidth
+    - const float CarouselAreaHeight
+    - const float CardCornerRadius
+    - const float StarSize
+    - const float StarSpacing
+    - const float InfoIconSize
+    - const float MenuButtonWidth
+    - const float MenuButtonHeight
+    - const float SearchButtonSize
+    - const float HeartButtonWidth
+    - const float HeartButtonHeight
+    - TextLabel descriptionLabel
+    - string[] tabNames
+    - int selectedTab
+    - float tabWidth
+    - List<List<Recipe>> recipes
+    - View carouselClip
+    - View carouselContainer
+    - PanGestureDetector pan
+    - float carouselCardWidth
+    - float carouselCardHeight
+    - float carouselAreaWidth
+    - float carouselAreaHeight
+    - int carouselCount
+    - int currentIndex
+    - float startPanX
+    - float startContainerX
+    - View underline
+    - TextLabel[] tabLabels
+    - ImageView menuButton
+    - ImageView heartButton
+    ' Methods
+    + MainView()
+    + static string GetResourcePath(string relativePath)
+    + void CreateDescriptionLabel(float, float)
+    + void CreateTabBar(float, float)
+    + void CreateTabBarUI(float, float)
+    + void UpdateDescription()
+    + void CreateCarousel(float, float)
+    + void UpdateCarousel()
+    + void Pan_Detected(object, PanGestureDetector.DetectedEventArgs)
+    + void CreateMenuButton(float, float)
+    + void CreateSearchButton(float, float)
+    + void CreatePopularRecipesTitle(float, float)
+    + void CreateHeartButton(float, float)
+  }
+
+  class Recipe {
+    + string Image { get; set; }
+    + string Title { get; set; }
+    + string Description { get; set; }
+    + string Time { get; set; }
+    + string Likes { get; set; }
+    + string Comments { get; set; }
+  }
+
+  class MenuView {
+    ' Methods
+    + MenuView()
+    + static string GetResourcePath(string relativePath)
+  }
+
+  class SplashView {
+    - float scaleX
+    - float scaleY
+    + SplashView()
+    + static string GetResourcePath(string relativePath)
+  }
+
+  class Strings {
+    + const string Appetizers
+    + const string Entrees
+    + const string Dessert
+    + const string PopularRecipes
+  }
+  MainView --> Strings : uses
+}
+
+' Inheritance
+Program --|> NUIApplication
+MainView --|> View
+MenuView --|> View
+SplashView --|> View
+
+' Relationships
+NavigationController ..> View : manages
+NavigationController ..> Window : manages
+Program ..> NavigationController : uses
+Program ..> SplashView : shows
+Program ..> MainView : shows
+MainView --> Recipe : uses
+MainView ..> MenuView : shows
+MenuView ..> NavigationController : uses
+SplashView ..> ImageView : uses
+
+@enduml 

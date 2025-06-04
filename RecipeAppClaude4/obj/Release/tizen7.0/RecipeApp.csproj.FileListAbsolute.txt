@@ -1,0 +1,11 @@
+C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\obj\Release\tizen7.0\RecipeApp.csproj.AssemblyReference.cache
+C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\obj\Release\tizen7.0\RecipeApp.GeneratedMSBuildEditorConfig.editorconfig
+C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\obj\Release\tizen7.0\RecipeApp.AssemblyInfoInputs.cache
+C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\obj\Release\tizen7.0\RecipeApp.AssemblyInfo.cs
+C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\obj\Release\tizen7.0\RecipeApp.csproj.CoreCompileInputs.cache
+C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\obj\Release\tizen7.0\RecipeApp.sourcelink.json
+C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\bin\Release\tizen7.0\RecipeApp.deps.json
+C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\bin\Release\tizen7.0\RecipeApp.dll
+C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\bin\Release\tizen7.0\RecipeApp.pdb
+C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\obj\Release\tizen7.0\RecipeApp.dll
+C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\obj\Release\tizen7.0\RecipeApp.pdb

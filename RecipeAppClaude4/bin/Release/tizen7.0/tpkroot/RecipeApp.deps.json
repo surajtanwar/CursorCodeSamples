@@ -1,0 +1,56 @@
+{
+  "runtimeTarget": {
+    "name": "Tizen,Version=v7.0/",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    "Tizen,Version=v7.0": {},
+    "Tizen,Version=v7.0/": {
+      "RecipeApp/1.0.0": {
+        "dependencies": {
+          "Tizen.NET": "10.0.0.17508"
+        },
+        "runtime": {
+          "RecipeApp.dll": {}
+        }
+      },
+      "Microsoft.NETCore.Platforms/3.1.0": {},
+      "Tizen.NET/10.0.0.17508": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "3.1.0",
+          "Tizen.NET.API7": "7.0.0.15162"
+        }
+      },
+      "Tizen.NET.API7/7.0.0.15162": {}
+    }
+  },
+  "libraries": {
+    "RecipeApp/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.NETCore.Platforms/3.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-z7aeg8oHln2CuNulfhiLYxCVMPEwBl3rzicjvIX+4sUuCwvXw5oXQEtbiU2c0z4qYL5L3Kmx0mMA/+t/SbY67w==",
+      "path": "microsoft.netcore.platforms/3.1.0",
+      "hashPath": "microsoft.netcore.platforms.3.1.0.nupkg.sha512"
+    },
+    "Tizen.NET/10.0.0.17508": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-sEFJb1Pre8Li06CkvE4ub/ifd4WS3eZfJxHojiUK57mTewmx/PWv3Tm4x6v6hj+N97+FmeoBcrIhYNh8bB8goQ==",
+      "path": "tizen.net/10.0.0.17508",
+      "hashPath": "tizen.net.10.0.0.17508.nupkg.sha512"
+    },
+    "Tizen.NET.API7/7.0.0.15162": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-DzzOhFUbWxxTj4iIlEL1zTv+o1zPOJDJY+j9fy5AiiwjIAetxMMHa6KHyepWFqTqZ/u+w4L+cO5WqAW1tRa/rg==",
+      "path": "tizen.net.api7/7.0.0.15162",
+      "hashPath": "tizen.net.api7.7.0.0.15162.nupkg.sha512"
+    }
+  }
+}

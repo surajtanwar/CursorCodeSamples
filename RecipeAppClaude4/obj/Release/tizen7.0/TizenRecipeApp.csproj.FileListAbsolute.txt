@@ -1,0 +1,9 @@
+C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\bin\Release\tizen7.0\tpkroot\bin\RecipeApp.dll
+C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\bin\Release\tizen7.0\tpkroot\bin\RecipeApp.pdb
+C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\bin\Release\tizen7.0\tpkroot\RecipeApp.deps.json
+C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\bin\Release\tizen7.0\tpkroot\res\images\app_icon.png
+C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\bin\Release\tizen7.0\tpkroot\res\images\splash\Group.png
+C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\bin\Release\tizen7.0\tpkroot\res\images\splash\Group_2.png
+C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\bin\Release\tizen7.0\tpkroot\res\images\splash\Rectangle.png
+C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\bin\Release\tizen7.0\tpkroot\tizen-manifest.xml
+C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\bin\Release\tizen7.0\org.tizen.example.RecipeApp-1.0.0.tpk
