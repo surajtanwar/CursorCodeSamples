@@ -1,3 +1,6 @@
+C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\bin\Debug\tizen7.0\tpkroot\bin\res\images\splash\Rectangle.png
+C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\bin\Debug\tizen7.0\tpkroot\bin\res\images\splash\Group.png
+C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\bin\Debug\tizen7.0\tpkroot\bin\res\images\splash\Group_2.png
 C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\bin\Debug\tizen7.0\tpkroot\bin\RecipeApp.dll
 C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\bin\Debug\tizen7.0\tpkroot\bin\RecipeApp.pdb
 C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\bin\Debug\tizen7.0\tpkroot\RecipeApp.deps.json

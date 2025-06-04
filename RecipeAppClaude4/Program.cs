@@ -8,7 +8,6 @@ namespace RecipeApp
     class Program : NUIApplication
     {
         private Window mainWindow;
-        private View rootView;
         private SplashScreen splashScreen;
         private bool isMainAppLoaded = false;
 
@@ -59,114 +58,11 @@ namespace RecipeApp
             isMainAppLoaded = true;
 
             // Set background color for main app
-            mainWindow.BackgroundColor = Styles.Colors.Background;
+            mainWindow.BackgroundColor = Color.White;
 
-            // Create root view
-            rootView = new View()
-            {
-                Layout = new LinearLayout()
-                {
-                    LinearOrientation = LinearLayout.Orientation.Vertical,
-                    LinearAlignment = LinearLayout.Alignment.Center,
-                    CellPadding = new Size2D(0, (int)Styles.Spacing.Medium)
-                },
-                WidthSpecification = LayoutParamPolicies.MatchParent,
-                HeightSpecification = LayoutParamPolicies.MatchParent,
-                Padding = new Extents(Styles.Spacing.Large, Styles.Spacing.Large, 60, Styles.Spacing.Large),
-                BackgroundColor = Styles.Colors.Background
-            };
-
-            // Create header
-            var headerLabel = new TextLabel()
-            {
-                WidthSpecification = LayoutParamPolicies.MatchParent,
-                HeightSpecification = LayoutParamPolicies.WrapContent,
-                Margin = new Extents(0, 0, 0, Styles.Spacing.ExtraLarge)
-            };
-            Styles.ApplyHeadlineStyle(headerLabel, "Recipe App");
-
-            // Create welcome message
-            var welcomeLabel = new TextLabel()
-            {
-                WidthSpecification = LayoutParamPolicies.MatchParent,
-                HeightSpecification = LayoutParamPolicies.WrapContent,
-                Margin = new Extents(0, 0, 0, Styles.Spacing.Large)
-            };
-            Styles.ApplySubtitleStyle(welcomeLabel, "Welcome to your Recipe Collection!");
-
-            // Create buttons container with card styling
-            var buttonsContainer = new View()
-            {
-                Layout = new LinearLayout()
-                {
-                    LinearOrientation = LinearLayout.Orientation.Vertical,
-                    CellPadding = new Size2D(0, (int)Styles.Spacing.Medium)
-                },
-                WidthSpecification = LayoutParamPolicies.MatchParent,
-                HeightSpecification = LayoutParamPolicies.WrapContent
-            };
-            Styles.ApplyCardStyle(buttonsContainer);
-
-            // Create custom button views (since Button component may not be available)
-            var addRecipeBtn = CreateCustomButton("Add Recipe", Styles.Colors.Primary);
-            addRecipeBtn.TouchEvent += (sender, e) =>
-            {
-                if (e.Touch.GetState(0) == PointStateType.Up)
-                {
-                    ShowToast("Add Recipe feature coming soon!");
-                }
-                return true;
-            };
-
-            var viewRecipesBtn = CreateCustomButton("View Recipes", Styles.Colors.Secondary);
-            viewRecipesBtn.TouchEvent += (sender, e) =>
-            {
-                if (e.Touch.GetState(0) == PointStateType.Up)
-                {
-                    ShowToast("View Recipes feature coming soon!");
-                }
-                return true;
-            };
-
-            var settingsBtn = CreateCustomButton("Settings", Styles.Colors.Accent);
-            settingsBtn.TouchEvent += (sender, e) =>
-            {
-                if (e.Touch.GetState(0) == PointStateType.Up)
-                {
-                    ShowToast("Settings feature coming soon!");
-                }
-                return true;
-            };
-
-            var aboutBtn = CreateCustomButton("About", Styles.Colors.Info);
-            aboutBtn.TouchEvent += (sender, e) =>
-            {
-                if (e.Touch.GetState(0) == PointStateType.Up)
-                {
-                    ShowToast("Recipe App v1.0.0 - Built with Tizen NUI");
-                }
-                return true;
-            };
-
-            // Add buttons to container
-            buttonsContainer.Add(addRecipeBtn);
-            buttonsContainer.Add(viewRecipesBtn);
-            buttonsContainer.Add(settingsBtn);
-            buttonsContainer.Add(aboutBtn);
-
-            // Add all components to root view
-            rootView.Add(headerLabel);
-            rootView.Add(welcomeLabel);
-            rootView.Add(buttonsContainer);
-
-            // Add root view to window with fade-in animation
-            rootView.Opacity = 0.0f;
-            mainWindow.Add(rootView);
-            
-            // Animate main app entrance
-            var fadeInAnimation = new Animation(500);
-            fadeInAnimation.AnimateTo(rootView, "Opacity", 1.0f);
-            fadeInAnimation.Play();
+            // Create and add the HomePage
+            var homePage = new HomePage();
+            mainWindow.Add(homePage);
         }
 
         private View CreateCustomButton(string text, Color backgroundColor)

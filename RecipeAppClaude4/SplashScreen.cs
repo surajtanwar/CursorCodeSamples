@@ -1,6 +1,8 @@
 using System;
+using System.IO;
 using Tizen.NUI;
 using Tizen.NUI.BaseComponents;
+using Tizen.Applications;
 
 namespace RecipeApp
 {
@@ -32,6 +34,37 @@ namespace RecipeApp
             Initialize();
         }
 
+        private string GetResourcePath(string resourceName)
+        {
+            // Use Tizen.Applications to get proper resource path
+            try
+            {
+                var resourceDir = Application.Current.DirectoryInfo.Resource;
+                var splashImagePath = System.IO.Path.Combine(resourceDir, "images", "splash", resourceName);
+                
+                // Check if file exists, if not try alternative paths
+                if (File.Exists(splashImagePath))
+                {
+                    return splashImagePath;
+                }
+                
+                // Try direct path in res folder
+                var directPath = System.IO.Path.Combine(resourceDir, resourceName);
+                if (File.Exists(directPath))
+                {
+                    return directPath;
+                }
+                
+                // Fallback to just the resource name (for relative paths)
+                return resourceName;
+            }
+            catch (Exception)
+            {
+                // Fallback to relative path if DirectoryInfo.Resource fails
+                return $"res/images/splash/{resourceName}";
+            }
+        }
+
         private void Initialize()
         {
             // Set up the main splash container for 720x1280 resolution
@@ -40,12 +73,13 @@ namespace RecipeApp
             BackgroundColor = Color.White; // Background: #ffffff from CSS
 
             // Create the rectangle background with gradient effect
+            // Original size: 375px x 667px, scaled to 720px x 1280px
             var rectangleBackground = new ImageView()
             {
-                ResourceUrl = "res/images/splash/Rectangle.png",
-                WidthSpecification = LayoutParamPolicies.MatchParent,
-                HeightSpecification = LayoutParamPolicies.MatchParent,
-                Position = new Position(0, 0)
+                ResourceUrl = GetResourcePath("Rectangle.png"),
+                Size = new Size(TARGET_WIDTH, TARGET_HEIGHT), // 720x1280
+                Position = new Position(0, 0),
+                PositionUsesPivotPoint = false
             };
 
             // Create the main chef hat group - scaled for 720x1280
@@ -53,7 +87,7 @@ namespace RecipeApp
             // Scaled position: left: 175px, top: 213px
             var chefHatGroup = new ImageView()
             {
-                ResourceUrl = "res/images/splash/Group.png",
+                ResourceUrl = GetResourcePath("Group.png"),
                 Size = new Size(384, 384), // Scaled up from ~200x200 (200 * 1.92)
                 Position = new Position(91 * scaleX, 111 * scaleY), // ~175, 213
                 PositionUsesPivotPoint = false
@@ -64,7 +98,7 @@ namespace RecipeApp
             // Scaled position: left: 179px, top: 701px
             var textGroup = new ImageView()
             {
-                ResourceUrl = "res/images/splash/Group_2.png",
+                ResourceUrl = GetResourcePath("Group_2.png"),
                 Size = new Size(384, 192), // Scaled up from ~200x100 (200 * 1.92, 100 * 1.92)
                 Position = new Position(93 * scaleX, 365 * scaleY), // ~179, 701
                 PositionUsesPivotPoint = false

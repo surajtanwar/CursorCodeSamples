@@ -5,9 +5,15 @@
     <TargetFrameworks>tizen10.0;tizen7.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="res\images\splash\Rectangle.png" />
-    <Content Include="res\images\splash\Group.png" />
-    <Content Include="res\images\splash\Group_2.png" />
+    <Content Include="res\images\splash\Rectangle.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="res\images\splash\Group.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="res\images\splash\Group_2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   
   <Import Project="RecipeApp.Package.targets" />
