@@ -108,20 +108,36 @@ namespace RecipeApp
                 Text = "POPULAR RECIPES",
                 TextColor = new Color(0.92f, 0.34f, 0.34f, 1.0f), // #eb5757
                 FontFamily = "Samsung One 700", // Roboto-Bold equivalent
-                PointSize = 18f / FONT_SCALE, // 18px to points
+                PointSize = 20f / FONT_SCALE, // Increased from 18px to 20px for better visibility
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
-                Position = new Position(TARGET_WIDTH / 2, 10 * scaleY), // Centered
-                PositionUsesPivotPoint = true,
-                PivotPoint = new Vector3(0.5f, 0.5f, 0.5f)
+                WidthSpecification = LayoutParamPolicies.MatchParent,
+                HeightSpecification = LayoutParamPolicies.WrapContent,
+                Position = new Position(0, 50 * scaleY), // Moved down from top edge
+                PositionUsesPivotPoint = false
+            };
+
+            // Create category tabs wrapper for centering
+            var categoriesWrapper = new View()
+            {
+                WidthSpecification = LayoutParamPolicies.MatchParent,
+                HeightSpecification = LayoutParamPolicies.WrapContent,
+                Position = new Position(0, 100 * scaleY), // Adjusted to accommodate moved header
+                PositionUsesPivotPoint = false
             };
 
             // Create category tabs container
             var categoriesContainer = new View()
             {
-                Size = new Size(TARGET_WIDTH, 50 * scaleY),
-                Position = new Position(0, 84 * scaleY), // Scaled from 84px
-                PositionUsesPivotPoint = false
+                Layout = new LinearLayout()
+                {
+                    LinearOrientation = LinearLayout.Orientation.Horizontal
+                },
+                WidthSpecification = LayoutParamPolicies.WrapContent,
+                HeightSpecification = LayoutParamPolicies.WrapContent,
+                Position = new Position(TARGET_WIDTH / 2, 0),
+                PositionUsesPivotPoint = true,
+                PivotPoint = new Vector3(0.5f, 0.5f, 0.5f)
             };
 
             // Create category labels
@@ -133,8 +149,9 @@ namespace RecipeApp
                 PointSize = 13f / FONT_SCALE, // 13px to points
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
-                Position = new Position(TARGET_WIDTH / 2 - 122.5f * scaleX, 0), // Scaled from calc(50% - 122.5px)
-                PositionUsesPivotPoint = false
+                WidthSpecification = LayoutParamPolicies.WrapContent,
+                HeightSpecification = LayoutParamPolicies.WrapContent,
+                Margin = new Extents(0, (ushort)(20 * scaleX), 0, 0) // Right margin for spacing
             };
 
             // Add touch event for appetizers category
@@ -155,8 +172,9 @@ namespace RecipeApp
                 PointSize = 13f / FONT_SCALE, // 13px to points
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
-                Position = new Position(TARGET_WIDTH / 2 - 17.5f * scaleX, 0), // Scaled from calc(50% - 17.5px)
-                PositionUsesPivotPoint = false
+                WidthSpecification = LayoutParamPolicies.WrapContent,
+                HeightSpecification = LayoutParamPolicies.WrapContent,
+                Margin = new Extents((ushort)(20 * scaleX), (ushort)(20 * scaleX), 0, 0) // Left and right margins for spacing
             };
 
             // Add touch event for entrees category
@@ -177,8 +195,9 @@ namespace RecipeApp
                 PointSize = 13f / FONT_SCALE, // 13px to points
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
-                Position = new Position(TARGET_WIDTH / 2 + 67.5f * scaleX, 0), // Scaled from calc(50% + 67.5px)
-                PositionUsesPivotPoint = false
+                WidthSpecification = LayoutParamPolicies.WrapContent,
+                HeightSpecification = LayoutParamPolicies.WrapContent,
+                Margin = new Extents((ushort)(20 * scaleX), 0, 0, 0) // Left margin for spacing
             };
 
             // Add touch event for dessert category
@@ -191,12 +210,12 @@ namespace RecipeApp
                 return true;
             };
 
-            // Create underline for selected category (ENTREES)
+            // Create underline for selected category (ENTREES) - positioned relative to entreesLabel
             var underline = new View()
             {
                 BackgroundColor = Color.Black,
                 Size = new Size(54 * scaleX, 2 * scaleY), // Scaled from 54px x 2px
-                Position = new Position(TARGET_WIDTH / 2 - 16.5f * scaleX, 22 * scaleY), // Scaled from calc(50% - 16.5px) top: 106px
+                Position = new Position(TARGET_WIDTH / 2 - 27 * scaleX, 30 * scaleY), // Centered under the tabs
                 PositionUsesPivotPoint = false
             };
 
@@ -205,11 +224,14 @@ namespace RecipeApp
             categoriesContainer.Add(dessertLabel);
             categoriesContainer.Add(underline);
 
+            // Add categories container to the wrapper
+            categoriesWrapper.Add(categoriesContainer);
+
             // Create main recipe card container
             var recipeContainer = new View()
             {
                 Size = new Size(TARGET_WIDTH, 500 * scaleY),
-                Position = new Position(0, 126 * scaleY), // Scaled from 126px
+                Position = new Position(0, 160 * scaleY), // Adjusted to maintain spacing
                 PositionUsesPivotPoint = false
             };
 
@@ -433,7 +455,7 @@ namespace RecipeApp
             Add(menuButton);
             Add(searchButton);
             Add(popularRecipesLabel);
-            Add(categoriesContainer);
+            Add(categoriesWrapper);
             Add(recipeContainer);
 
             // Set up fade-in animation
