@@ -28,9 +28,94 @@ namespace RecipeApp
         // Font scaling factor (1 point = 1.33px)
         private const float FONT_SCALE = 1.33f;
 
+        // Add carousel state variables
+        private int currentImageIndex = 0;
+        private int currentCategoryIndex = 1; // Start with ENTREES (index 1)
+        
+        // Category-specific content
+        private readonly string[][] categoryImages = {
+            new string[] { "appetizer.png", "maskgroup0.png", "maskgroup1.png" }, // APPETIZERS
+            new string[] { "rectangle0.png", "appetizer.png", "dessert.png" },    // ENTREES  
+            new string[] { "dessert.png", "maskgroup1.png", "maskgroup0.png" }   // DESSERTS
+        };
+        
+        private readonly string[][] categoryTitles = {
+            new string[] { "Classic Appetizers", "Gourmet Starters", "Party Snacks" },
+            new string[] { "Prime Rib Roast", "Grilled Salmon", "Pasta Primavera" },
+            new string[] { "Chocolate Cake", "Fresh Fruit Tart", "Ice Cream Sundae" }
+        };
+        
+        private readonly string[][] categoryDescriptions = {
+            new string[] {
+                "Discover our collection of mouth-watering appetizers that will perfectly start your meal. From elegant canapés to comfort food favorites, these recipes will impress your guests and family.",
+                "Elevate your dining experience with these gourmet starter recipes. Perfect for special occasions and dinner parties.",
+                "Fun and delicious party snacks that everyone will love. Easy to make and perfect for entertaining."
+            },
+            new string[] {
+                "The Prime Rib Roast is a classic and tender cut of beef taken from the rib primal cut. Learn how to make the perfect prime rib roast to serve your family and friends. Check out What's Cooking America's award-winning Classic Prime Rib Roast recipe and photo tutorial to help you make the Perfect Prime Rib Roast.",
+                "Fresh Atlantic salmon grilled to perfection with herbs and lemon. A healthy and delicious main course that's ready in under 30 minutes.",
+                "A colorful and nutritious pasta dish loaded with fresh vegetables. Perfect for a light lunch or dinner."
+            },
+            new string[] {
+                "Indulge in our rich and decadent chocolate cake recipe. Moist layers with creamy frosting that will satisfy any sweet tooth.",
+                "A beautiful and refreshing fruit tart with pastry cream and seasonal fresh fruits. Perfect for summer gatherings.",
+                "Create the perfect ice cream sundae with premium ice cream and delicious toppings. A classic treat for all ages."
+            }
+        };
+
+        // Current category data (will be updated when switching tabs)
+        private string[] carouselImages;
+        private string[] recipeTitles;
+        private string[] recipeDescriptions;
+        private ImageView carouselImageView;
+        private TextLabel carouselTitleLabel;
+        private TextLabel carouselDescriptionLabel;
+        private View dotsContainer;
+        private Timer carouselTimer;
+        
+        // Tab references for dynamic styling
+        private TextLabel appetizersLabel;
+        private TextLabel entreesLabel;
+        private TextLabel dessertLabel;
+        private View underline;
+
         public HomePage()
         {
+            // Initialize current category data
+            UpdateCurrentCategoryData();
             Initialize();
+        }
+
+        private void UpdateCurrentCategoryData()
+        {
+            carouselImages = categoryImages[currentCategoryIndex];
+            recipeTitles = categoryTitles[currentCategoryIndex];
+            recipeDescriptions = categoryDescriptions[currentCategoryIndex];
+        }
+
+        private void SwitchToCategory(int categoryIndex)
+        {
+            if (categoryIndex == currentCategoryIndex) return;
+
+            currentCategoryIndex = categoryIndex;
+            currentImageIndex = 0; // Reset to first image in new category
+            
+            // Update category data
+            UpdateCurrentCategoryData();
+            
+            // Update carousel content
+            UpdateCarouselContent();
+            
+            // Update tab styling
+            UpdateTabStyling();
+            
+            // Restart carousel timer
+            carouselTimer?.Stop();
+            StartCarouselTimer();
+            
+            // Show category switch notification
+            string[] categoryNames = { "Appetizers", "Entrees", "Desserts" };
+            ShowToast($"Switched to {categoryNames[currentCategoryIndex]} category");
         }
 
         private string GetResourcePath(string resourceName)
@@ -141,7 +226,7 @@ namespace RecipeApp
             };
 
             // Create category labels
-            var appetizersLabel = new TextLabel()
+            appetizersLabel = new TextLabel()
             {
                 Text = "APPETIZERS",
                 TextColor = new Color(0.45f, 0.45f, 0.45f, 1.0f), // #737373
@@ -159,12 +244,12 @@ namespace RecipeApp
             {
                 if (e.Touch.GetState(0) == PointStateType.Up)
                 {
-                    ShowToast("Appetizers category selected!");
+                    SwitchToCategory(0); // APPETIZERS
                 }
                 return true;
             };
 
-            var entreesLabel = new TextLabel()
+            entreesLabel = new TextLabel()
             {
                 Text = "ENTREES",
                 TextColor = Color.Black, // #000000
@@ -182,12 +267,12 @@ namespace RecipeApp
             {
                 if (e.Touch.GetState(0) == PointStateType.Up)
                 {
-                    ShowToast("Entrees category selected!");
+                    SwitchToCategory(1); // ENTREES
                 }
                 return true;
             };
 
-            var dessertLabel = new TextLabel()
+            dessertLabel = new TextLabel()
             {
                 Text = "DESSERT",
                 TextColor = new Color(0.45f, 0.45f, 0.45f, 1.0f), // #737373
@@ -205,13 +290,13 @@ namespace RecipeApp
             {
                 if (e.Touch.GetState(0) == PointStateType.Up)
                 {
-                    ShowToast("Dessert category selected!");
+                    SwitchToCategory(2); // DESSERTS
                 }
                 return true;
             };
 
             // Create underline for selected category (ENTREES) - positioned relative to entreesLabel
-            var underline = new View()
+            underline = new View()
             {
                 BackgroundColor = Color.Black,
                 Size = new Size(54 * scaleX, 2 * scaleY), // Scaled from 54px x 2px
@@ -235,30 +320,55 @@ namespace RecipeApp
                 PositionUsesPivotPoint = false
             };
 
-            // Create main recipe image (rectangle)
-            var recipeImage = new ImageView()
+            // Create carousel container for recipe images
+            var carouselContainer = new View()
             {
-                ResourceUrl = GetResourcePath("rectangle0.png"),
-                Size = new Size(221 * scaleX, 221 * scaleY), // Scaled from 221x221
-                Position = new Position(77 * scaleX, 0), // Scaled from left: 77px
+                Size = new Size(221 * scaleX, 221 * scaleY), // Same size as original recipe image
+                Position = new Position(77 * scaleX, 0), // Same position as original
                 PositionUsesPivotPoint = false,
-                CornerRadius = 5 * scaleX // Scaled border-radius
+                ClippingMode = ClippingModeType.ClipChildren
             };
 
-            // Create mask groups (side food images)
-            var leftMaskGroup = new ImageView()
+            // Create main carousel image (will be updated dynamically)
+            carouselImageView = new ImageView()
             {
-                ResourceUrl = GetResourcePath("mask-group1.svg"),
-                Position = new Position(-133 * scaleX, 10 * scaleY), // Scaled from left: -133px, top: 136px
-                PositionUsesPivotPoint = false
+                ResourceUrl = GetResourcePath(carouselImages[currentImageIndex]),
+                Size = new Size(221 * scaleX, 221 * scaleY),
+                Position = new Position(0, 0),
+                PositionUsesPivotPoint = false,
+                CornerRadius = 5 * scaleX
             };
 
-            var rightMaskGroup = new ImageView()
+            // Add touch events for carousel navigation
+            carouselImageView.TouchEvent += OnCarouselTouch;
+            carouselContainer.Add(carouselImageView);
+
+            // Create navigation dots container
+            dotsContainer = new View()
             {
-                ResourceUrl = GetResourcePath("mask-group0.svg"),
-                Position = new Position(308 * scaleX, 10 * scaleY), // Scaled from left: 308px, top: 136px
-                PositionUsesPivotPoint = false
+                Layout = new LinearLayout()
+                {
+                    LinearOrientation = LinearLayout.Orientation.Horizontal
+                },
+                WidthSpecification = LayoutParamPolicies.WrapContent,
+                HeightSpecification = LayoutParamPolicies.WrapContent,
+                Position = new Position(TARGET_WIDTH / 2, 235 * scaleY), // Below the image
+                PositionUsesPivotPoint = true,
+                PivotPoint = new Vector3(0.5f, 0.5f, 0.5f)
             };
+
+            // Create navigation dots
+            for (int i = 0; i < carouselImages.Length; i++)
+            {
+                var dot = new View()
+                {
+                    Size = new Size(8 * scaleX, 8 * scaleY),
+                    BackgroundColor = i == currentImageIndex ? Color.Black : new Color(0.7f, 0.7f, 0.7f, 1.0f),
+                    CornerRadius = 4 * scaleX,
+                    Margin = new Extents(0, (ushort)(4 * scaleX), 0, 0)
+                };
+                dotsContainer.Add(dot);
+            }
 
             // Create heart button
             var heartButton = new ImageView()
@@ -334,10 +444,10 @@ namespace RecipeApp
             starContainer.Add(star4);
             starContainer.Add(star5);
 
-            // Create recipe title
-            var recipeTitleLabel = new TextLabel()
+            // Create recipe title (will be updated dynamically)
+            carouselTitleLabel = new TextLabel()
             {
-                Text = "Prime Rib Roast",
+                Text = recipeTitles[currentImageIndex],
                 TextColor = new Color(0.098f, 0.349f, 0.49f, 1.0f), // #19597d
                 FontFamily = "Samsung One 700", // Roboto-Bold
                 PointSize = 18f / FONT_SCALE, // 18px to points
@@ -347,21 +457,37 @@ namespace RecipeApp
                 PositionUsesPivotPoint = false
             };
 
-            // Create stats container
+            // Create stats container with horizontal layout
             var statsContainer = new View()
             {
-                Size = new Size(300 * scaleX, 30 * scaleY),
-                Position = new Position(77 * scaleX, 301 * scaleY), // Scaled from top: 427px
-                PositionUsesPivotPoint = false
+                Layout = new LinearLayout()
+                {
+                    LinearOrientation = LinearLayout.Orientation.Horizontal
+                },
+                WidthSpecification = LayoutParamPolicies.WrapContent,
+                HeightSpecification = LayoutParamPolicies.WrapContent,
+                Position = new Position(TARGET_WIDTH / 2, 301 * scaleY), // Centered horizontally
+                PositionUsesPivotPoint = true,
+                PivotPoint = new Vector3(0.5f, 0.5f, 0.5f)
             };
 
-            // Create time icon and text
+            // Create time stat container
+            var timeStatContainer = new View()
+            {
+                Layout = new LinearLayout()
+                {
+                    LinearOrientation = LinearLayout.Orientation.Horizontal
+                },
+                WidthSpecification = LayoutParamPolicies.WrapContent,
+                HeightSpecification = LayoutParamPolicies.WrapContent,
+                Margin = new Extents(0, (ushort)(30 * scaleX), 0, 0) // Right margin for spacing
+            };
+
             var timeIcon = new ImageView()
             {
                 ResourceUrl = GetResourcePath("icons0.svg"),
                 Size = new Size(19 * scaleX, 18 * scaleY),
-                Position = new Position(0, 0),
-                PositionUsesPivotPoint = false
+                Margin = new Extents(0, (ushort)(8 * scaleX), 0, 0) // Small right margin
             };
 
             var timeLabel = new TextLabel()
@@ -370,19 +496,31 @@ namespace RecipeApp
                 TextColor = Color.Black,
                 FontFamily = "Samsung One 400", // Roboto-Regular
                 PointSize = 14f / FONT_SCALE, // 14px to points
-                HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
-                Position = new Position(26 * scaleX, 0),
-                PositionUsesPivotPoint = false
+                WidthSpecification = LayoutParamPolicies.WrapContent,
+                HeightSpecification = LayoutParamPolicies.WrapContent
             };
 
-            // Create calories icon and text
+            timeStatContainer.Add(timeIcon);
+            timeStatContainer.Add(timeLabel);
+
+            // Create calories stat container
+            var caloriesStatContainer = new View()
+            {
+                Layout = new LinearLayout()
+                {
+                    LinearOrientation = LinearLayout.Orientation.Horizontal
+                },
+                WidthSpecification = LayoutParamPolicies.WrapContent,
+                HeightSpecification = LayoutParamPolicies.WrapContent,
+                Margin = new Extents(0, (ushort)(30 * scaleX), 0, 0) // Right margin for spacing
+            };
+
             var caloriesIcon = new ImageView()
             {
                 ResourceUrl = GetResourcePath("icons1.svg"),
                 Size = new Size(19 * scaleX, 18 * scaleY),
-                Position = new Position(89 * scaleX, 0),
-                PositionUsesPivotPoint = false
+                Margin = new Extents(0, (ushort)(8 * scaleX), 0, 0) // Small right margin
             };
 
             var caloriesLabel = new TextLabel()
@@ -391,19 +529,30 @@ namespace RecipeApp
                 TextColor = Color.Black,
                 FontFamily = "Samsung One 400", // Roboto-Regular
                 PointSize = 14f / FONT_SCALE, // 14px to points
-                HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
-                Position = new Position(112 * scaleX, 0),
-                PositionUsesPivotPoint = false
+                WidthSpecification = LayoutParamPolicies.WrapContent,
+                HeightSpecification = LayoutParamPolicies.WrapContent
             };
 
-            // Create servings icon and text
+            caloriesStatContainer.Add(caloriesIcon);
+            caloriesStatContainer.Add(caloriesLabel);
+
+            // Create servings stat container
+            var servingsStatContainer = new View()
+            {
+                Layout = new LinearLayout()
+                {
+                    LinearOrientation = LinearLayout.Orientation.Horizontal
+                },
+                WidthSpecification = LayoutParamPolicies.WrapContent,
+                HeightSpecification = LayoutParamPolicies.WrapContent
+            };
+
             var servingsIcon = new ImageView()
             {
                 ResourceUrl = GetResourcePath("icons2.svg"),
                 Size = new Size(19 * scaleX, 18 * scaleY),
-                Position = new Position(164 * scaleX, 0),
-                PositionUsesPivotPoint = false
+                Margin = new Extents(0, (ushort)(8 * scaleX), 0, 0) // Small right margin
             };
 
             var servingsLabel = new TextLabel()
@@ -412,23 +561,23 @@ namespace RecipeApp
                 TextColor = Color.Black,
                 FontFamily = "Samsung One 400", // Roboto-Regular
                 PointSize = 14f / FONT_SCALE, // 14px to points
-                HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
-                Position = new Position(191 * scaleX, 0),
-                PositionUsesPivotPoint = false
+                WidthSpecification = LayoutParamPolicies.WrapContent,
+                HeightSpecification = LayoutParamPolicies.WrapContent
             };
 
-            statsContainer.Add(timeIcon);
-            statsContainer.Add(timeLabel);
-            statsContainer.Add(caloriesIcon);
-            statsContainer.Add(caloriesLabel);
-            statsContainer.Add(servingsIcon);
-            statsContainer.Add(servingsLabel);
+            servingsStatContainer.Add(servingsIcon);
+            servingsStatContainer.Add(servingsLabel);
 
-            // Create description text
-            var descriptionLabel = new TextLabel()
+            // Add all stat containers to the main stats container
+            statsContainer.Add(timeStatContainer);
+            statsContainer.Add(caloriesStatContainer);
+            statsContainer.Add(servingsStatContainer);
+
+            // Create description text (will be updated dynamically)
+            carouselDescriptionLabel = new TextLabel()
             {
-                Text = "The Prime Rib Roast is a classic and tender cut of beef taken from the rib primal cut. Learn how to make the perfect prime rib roast to serve your family and friends. Check out What's Cooking America's award-winning Classic Prime Rib Roast recipe and photo tutorial to help you make the Perfect Prime Rib Roast.",
+                Text = recipeDescriptions[currentImageIndex],
                 TextColor = new Color(0.46f, 0.46f, 0.46f, 1.0f), // #757575
                 FontFamily = "Samsung One 400", // Roboto-Regular
                 PointSize = 14f / FONT_SCALE, // 14px to points
@@ -442,14 +591,13 @@ namespace RecipeApp
             };
 
             // Add all components to recipe container
-            recipeContainer.Add(leftMaskGroup);
-            recipeContainer.Add(rightMaskGroup);
-            recipeContainer.Add(recipeImage);
+            recipeContainer.Add(carouselContainer);
+            recipeContainer.Add(dotsContainer);
             recipeContainer.Add(heartButton);
             recipeContainer.Add(starContainer);
-            recipeContainer.Add(recipeTitleLabel);
+            recipeContainer.Add(carouselTitleLabel);
             recipeContainer.Add(statsContainer);
-            recipeContainer.Add(descriptionLabel);
+            recipeContainer.Add(carouselDescriptionLabel);
 
             // Add all main components to the home page
             Add(menuButton);
@@ -463,6 +611,76 @@ namespace RecipeApp
             var fadeInAnimation = new Animation(500); // 0.5 second fade-in
             fadeInAnimation.AnimateTo(this, "Opacity", 1.0f);
             fadeInAnimation.Play();
+
+            // Set initial tab styling
+            UpdateTabStyling();
+
+            // Start automatic carousel rotation
+            StartCarouselTimer();
+        }
+
+        private void StartCarouselTimer()
+        {
+            carouselTimer = new Timer(4000); // 4 seconds per image
+            carouselTimer.Tick += OnCarouselTimerTick;
+            carouselTimer.Start();
+        }
+
+        private bool OnCarouselTimerTick(object sender, Timer.TickEventArgs e)
+        {
+            // Auto-navigate to next image
+            NextCarouselImage();
+            return true; // Continue the timer
+        }
+
+        private void NextCarouselImage()
+        {
+            currentImageIndex = (currentImageIndex + 1) % carouselImages.Length;
+            UpdateCarouselContent();
+        }
+
+        private void UpdateCarouselContent()
+        {
+            // Update the carousel image with animation
+            var fadeOutAnimation = new Animation(300);
+            fadeOutAnimation.AnimateTo(carouselImageView, "Opacity", 0.0f);
+            fadeOutAnimation.Finished += (s, args) =>
+            {
+                carouselImageView.ResourceUrl = GetResourcePath(carouselImages[currentImageIndex]);
+                carouselTitleLabel.Text = recipeTitles[currentImageIndex];
+                carouselDescriptionLabel.Text = recipeDescriptions[currentImageIndex];
+                
+                var fadeInAnimation = new Animation(300);
+                fadeInAnimation.AnimateTo(carouselImageView, "Opacity", 1.0f);
+                fadeInAnimation.Play();
+            };
+            fadeOutAnimation.Play();
+
+            // Recreate navigation dots for the current category
+            RecreateNavigationDots();
+        }
+
+        private void RecreateNavigationDots()
+        {
+            // Clear existing dots
+            while (dotsContainer.ChildCount > 0)
+            {
+                var child = dotsContainer.GetChildAt(0);
+                dotsContainer.Remove(child);
+            }
+
+            // Create new dots for current category
+            for (int i = 0; i < carouselImages.Length; i++)
+            {
+                var dot = new View()
+                {
+                    Size = new Size(8 * scaleX, 8 * scaleY),
+                    BackgroundColor = i == currentImageIndex ? Color.Black : new Color(0.7f, 0.7f, 0.7f, 1.0f),
+                    CornerRadius = 4 * scaleX,
+                    Margin = new Extents(0, (ushort)(4 * scaleX), 0, 0)
+                };
+                dotsContainer.Add(dot);
+            }
         }
 
         private void ShowToast(string message)
@@ -520,6 +738,64 @@ namespace RecipeApp
                 return false;
             };
             timer.Start();
+        }
+
+        private bool OnCarouselTouch(object sender, View.TouchEventArgs e)
+        {
+            if (e.Touch.GetState(0) == PointStateType.Up)
+            {
+                // Stop automatic rotation temporarily
+                carouselTimer?.Stop();
+                
+                // Navigate to next image on touch
+                NextCarouselImage();
+
+                ShowToast($"Switched to: {recipeTitles[currentImageIndex]}");
+
+                // Restart automatic rotation after a delay
+                var restartTimer = new Timer(2000); // 2 second delay
+                restartTimer.Tick += (s, args) =>
+                {
+                    StartCarouselTimer();
+                    restartTimer.Stop();
+                    return false;
+                };
+                restartTimer.Start();
+            }
+            return true;
+        }
+
+        private void UpdateTabStyling()
+        {
+            // Reset all tab colors to inactive
+            appetizersLabel.TextColor = new Color(0.45f, 0.45f, 0.45f, 1.0f); // #737373
+            appetizersLabel.FontFamily = "Samsung One 400"; // Regular
+            
+            entreesLabel.TextColor = new Color(0.45f, 0.45f, 0.45f, 1.0f); // #737373
+            entreesLabel.FontFamily = "Samsung One 400"; // Regular
+            
+            dessertLabel.TextColor = new Color(0.45f, 0.45f, 0.45f, 1.0f); // #737373
+            dessertLabel.FontFamily = "Samsung One 400"; // Regular
+
+            // Set active tab styling
+            switch (currentCategoryIndex)
+            {
+                case 0: // APPETIZERS
+                    appetizersLabel.TextColor = Color.Black;
+                    appetizersLabel.FontFamily = "Samsung One 600"; // Medium
+                    underline.Position = new Position(TARGET_WIDTH / 2 - 122.5f * scaleX + 30 * scaleX, 30 * scaleY);
+                    break;
+                case 1: // ENTREES
+                    entreesLabel.TextColor = Color.Black;
+                    entreesLabel.FontFamily = "Samsung One 600"; // Medium
+                    underline.Position = new Position(TARGET_WIDTH / 2 - 27 * scaleX, 30 * scaleY);
+                    break;
+                case 2: // DESSERTS
+                    dessertLabel.TextColor = Color.Black;
+                    dessertLabel.FontFamily = "Samsung One 600"; // Medium
+                    underline.Position = new Position(TARGET_WIDTH / 2 + 67.5f * scaleX - 20 * scaleX, 30 * scaleY);
+                    break;
+            }
         }
     }
 } 
