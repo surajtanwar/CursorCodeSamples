@@ -9,6 +9,8 @@ namespace RecipeApp
     {
         private Window mainWindow;
         private View rootView;
+        private SplashScreen splashScreen;
+        private bool isMainAppLoaded = false;
 
         static void Main(string[] args)
         {
@@ -19,14 +21,44 @@ namespace RecipeApp
         protected override void OnCreate()
         {
             base.OnCreate();
-            Initialize();
+            InitializeSplashScreen();
         }
 
-        void Initialize()
+        void InitializeSplashScreen()
         {
             // Get the main window
             mainWindow = NUIApplication.GetDefaultWindow();
             mainWindow.Title = "Recipe App";
+            mainWindow.BackgroundColor = Color.White;
+
+            // Create and show splash screen
+            splashScreen = new SplashScreen(OnSplashComplete);
+            mainWindow.Add(splashScreen);
+
+            // Handle back key
+            mainWindow.KeyEvent += OnKeyEvent;
+        }
+
+        private void OnSplashComplete()
+        {
+            // Remove splash screen
+            if (splashScreen != null)
+            {
+                mainWindow.Remove(splashScreen);
+                splashScreen.Cleanup();
+                splashScreen = null;
+            }
+
+            // Initialize main app
+            InitializeMainApp();
+        }
+
+        void InitializeMainApp()
+        {
+            if (isMainAppLoaded) return;
+            isMainAppLoaded = true;
+
+            // Set background color for main app
             mainWindow.BackgroundColor = Styles.Colors.Background;
 
             // Create root view
@@ -127,11 +159,14 @@ namespace RecipeApp
             rootView.Add(welcomeLabel);
             rootView.Add(buttonsContainer);
 
-            // Add root view to window
+            // Add root view to window with fade-in animation
+            rootView.Opacity = 0.0f;
             mainWindow.Add(rootView);
-
-            // Handle back key
-            mainWindow.KeyEvent += OnKeyEvent;
+            
+            // Animate main app entrance
+            var fadeInAnimation = new Animation(500);
+            fadeInAnimation.AnimateTo(rootView, "Opacity", 1.0f);
+            fadeInAnimation.Play();
         }
 
         private View CreateCustomButton(string text, Color backgroundColor)

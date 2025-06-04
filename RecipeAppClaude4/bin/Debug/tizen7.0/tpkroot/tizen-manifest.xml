@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns="http://tizen.org/ns/packages" api-version="7.0" package="org.tizen.example.RecipeApp" version="1.0.0">
+  <profile name="mobile" />
+  <ui-application appid="org.tizen.example.RecipeApp" exec="RecipeApp.dll" multiple="false" nodisplay="false" taskmanage="true" type="dotnet" launch_mode="single">
+    <label>Recipe App</label>
+    <icon>res/images/app_icon.png</icon>
+    <metadata key="http://tizen.org/metadata/prefer_dotnet_aot" value="true" />
+    <metadata key="http://tizen.org/metadata/prefer_nuget_cache" value="true" />
+    <metadata key="http://samsung.com/metadata/prefer_dotnet_aot" value="true" />
+  </ui-application>
+  <privileges>
+    <privilege>http://tizen.org/privilege/internet</privilege>
+    <privilege>http://tizen.org/privilege/network.get</privilege>
+  </privileges>
+  <dependencies>
+    <dependency required-version="7.0" type="platform" />
+  </dependencies>
+</manifest> 

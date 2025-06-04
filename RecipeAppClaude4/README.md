@@ -11,6 +11,15 @@ This is a Tizen 7.0 mobile application built with .NET and **Tizen NUI (Natural 
 - **Smooth Animations**: Touch feedback and hover effects
 - **Custom Styling**: Rounded corners, gradients, and modern typography
 
+### 🚀 **Splash Screen**
+- **2-Second Launch Screen**: Beautiful splash screen displayed for 2 seconds on app launch
+- **720x1280 Resolution**: Optimized for modern smartphone resolution (HD 720p)
+- **Custom Design**: Recreates design from HTML/CSS specifications using NUI components
+- **Proportional Scaling**: Elements automatically scaled from original 375x667 design
+- **Smooth Transitions**: Fade-in/fade-out animations for professional app launch experience
+- **Resource Integration**: Uses images from `res/images/splash/` folder
+- **Background Gradient**: Matches the original coral/red gradient design
+
 ### 📱 **Application Features**
 - **Main Interface**: Clean, mobile-optimized UI with NUI components
 - **Interactive Buttons**: Color-coded buttons with touch feedback
@@ -35,14 +44,17 @@ RecipeApp/
 ├── RecipeApp.csproj          # Main project file with NUI references
 ├── RecipeApp.Package.targets # Package configuration
 ├── tizen-manifest.xml        # Tizen application manifest with NUI metadata
-├── Program.cs                # Main NUI application entry point
+├── Program.cs                # Main NUI application entry point with splash screen integration
+├── SplashScreen.cs           # Splash screen component that displays for 2 seconds on launch
+├── Styles.cs                 # Centralized styling configuration for consistent UI
 ├── res/
 │   └── images/
-│       ├── app_icon.png      # App icon (placeholder)
-│       └── splash/
-│           ├── Rectangle.png  # Splash screen element (placeholder)
-│           ├── Group.png      # Splash screen element (placeholder)
-│           └── Group_2.png    # Splash screen element (placeholder)
+│       ├── splash/
+│           ├── Rectangle.png  # Splash screen background with gradient
+│           ├── Group.png      # Chef hat logo for splash screen
+│           └── Group_2.png    # "Chef Recipes" text for splash screen
+│       ├── home/             # Home screen images (placeholder)
+│       └── menu/             # Menu screen images (placeholder)
 ├── build.bat                 # Windows build script
 ├── build.ps1                 # PowerShell build script
 └── README.md
