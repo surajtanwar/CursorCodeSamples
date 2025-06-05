@@ -201,18 +201,18 @@ namespace RecipeApp
                 return true;
             };
 
-            // Create "POPULAR RECIPES" header - positioned to be visible
+            // Create "POPULAR RECIPES" header - positioned to be clearly visible below system UI
             var popularRecipesLabel = new TextLabel()
             {
                 Text = "POPULAR RECIPES",
                 TextColor = new Color(0.92f, 0.34f, 0.34f, 1.0f), // #eb5757
                 FontFamily = "Samsung One 700", // Roboto-Bold equivalent
-                PointSize = 18f / FONT_SCALE, // Reduced by 2 points (was 20f, now 18f)
+                PointSize = 14f / FONT_SCALE, // Reduced by 2 points (was 20f, now 18f)
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
                 WidthSpecification = LayoutParamPolicies.MatchParent,
                 HeightSpecification = LayoutParamPolicies.WrapContent,
-                Position = new Position(0, 80 * scaleY), // Moved further down to be visible
+                Position = new Position(0, 120 * scaleY), // Moved much further down to ensure visibility
                 PositionUsesPivotPoint = false
             };
 
@@ -309,28 +309,28 @@ namespace RecipeApp
                 return true;
             };
 
-            // Create underline for selected category - positioned to align with tab centers
+            categoriesContainer.Add(appetizersLabel);
+            categoriesContainer.Add(entreesLabel);
+            categoriesContainer.Add(dessertLabel);
+
+            // Create underline for selected category - positioned separately for precise alignment
             underline = new View()
             {
                 BackgroundColor = Color.Black,
                 Size = new Size(54 * scaleX, 2 * scaleY), // Scaled from 54px x 2px
-                Position = new Position(TARGET_WIDTH / 2 - 27 * scaleX, 30 * scaleY), // Centered under the tabs
+                Position = new Position(TARGET_WIDTH / 2 - 27 * scaleX, 30 * scaleY), // Will be updated in UpdateTabStyling
                 PositionUsesPivotPoint = false
             };
 
-            categoriesContainer.Add(appetizersLabel);
-            categoriesContainer.Add(entreesLabel);
-            categoriesContainer.Add(dessertLabel);
-            categoriesContainer.Add(underline);
-
-            // Add categories container to the wrapper
+            // Add categories container and underline to the wrapper
             categoriesWrapper.Add(categoriesContainer);
+            categoriesWrapper.Add(underline);
 
             // Create main recipe card container
             var recipeContainer = new View()
             {
                 Size = new Size(TARGET_WIDTH, 500 * scaleY),
-                Position = new Position(0, 190 * scaleY), // Adjusted for moved header and tabs
+                Position = new Position(0, 230 * scaleY), // Adjusted for moved header and tabs
                 PositionUsesPivotPoint = false
             };
 
@@ -357,19 +357,23 @@ namespace RecipeApp
             carouselImageView.TouchEvent += OnCarouselTouch;
             carouselContainer.Add(carouselImageView);
 
-            // Create side mask group images for enhanced visual depth
+            // Create side mask group images for enhanced visual depth - positioned to create preview effect like in design
             leftMaskGroup = new ImageView()
             {
                 ResourceUrl = GetResourcePath(GetLeftMaskImage()),
-                Position = new Position(-133 * scaleX, 10 * scaleY), // Scaled from original position
-                PositionUsesPivotPoint = false
+                Size = new Size(80 * scaleX, 180 * scaleY), // Larger size for better preview
+                Position = new Position(30 * scaleX, 10 * scaleY), // Much closer to main carousel, slight overlap
+                PositionUsesPivotPoint = false,
+                Opacity = 0.8f // Slightly more visible for preview effect
             };
 
             rightMaskGroup = new ImageView()
             {
                 ResourceUrl = GetResourcePath(GetRightMaskImage()),
-                Position = new Position(308 * scaleX, 10 * scaleY), // Scaled from original position
-                PositionUsesPivotPoint = false
+                Size = new Size(80 * scaleX, 180 * scaleY), // Larger size for better preview  
+                Position = new Position(240 * scaleX, 10 * scaleY), // Much closer to main carousel, slight overlap
+                PositionUsesPivotPoint = false,
+                Opacity = 0.8f // Slightly more visible for preview effect
             };
 
             // Navigation dots hidden as requested
@@ -764,23 +768,42 @@ namespace RecipeApp
             dessertLabel.TextColor = new Color(0.45f, 0.45f, 0.45f, 1.0f); // #737373
             dessertLabel.FontFamily = "Samsung One 400"; // Regular
 
-            // Set active tab styling with properly aligned underline positions for centered tabs
+            // Calculate approximate tab positions and center the underline
+            // Estimated tab widths at 10.3pt font size: APPETIZERS ~85px, ENTREES ~60px, DESSERT ~55px
+            float appetizersWidth = 85 * scaleX;
+            float entreesWidth = 60 * scaleX;
+            float dessertWidth = 55 * scaleX;
+            float tabMargin = 25 * scaleX;
+            
+            // Total width of tab group
+            float totalTabWidth = appetizersWidth + tabMargin + entreesWidth + tabMargin + dessertWidth;
+            
+            // Starting position (left edge of tab group)
+            float startX = TARGET_WIDTH / 2 - totalTabWidth / 2;
+
+            // Set active tab styling with precisely calculated underline positions
             switch (currentCategoryIndex)
             {
                 case 0: // APPETIZERS
                     appetizersLabel.TextColor = Color.Black;
                     appetizersLabel.FontFamily = "Samsung One 600"; // Medium
-                    underline.Position = new Position(TARGET_WIDTH / 2 - 90 * scaleX, 30 * scaleY); // Centered under APPETIZERS
+                    // Center of APPETIZERS tab
+                    float appetizersCenter = startX + appetizersWidth / 2;
+                    underline.Position = new Position(appetizersCenter - 27 * scaleX, 30 * scaleY);
                     break;
                 case 1: // ENTREES
                     entreesLabel.TextColor = Color.Black;
                     entreesLabel.FontFamily = "Samsung One 600"; // Medium
-                    underline.Position = new Position(TARGET_WIDTH / 2 - 27 * scaleX, 30 * scaleY); // Centered under ENTREES
+                    // Center of ENTREES tab
+                    float entreesCenter = startX + appetizersWidth + tabMargin + entreesWidth / 2;
+                    underline.Position = new Position(entreesCenter - 27 * scaleX, 30 * scaleY);
                     break;
                 case 2: // DESSERTS
                     dessertLabel.TextColor = Color.Black;
                     dessertLabel.FontFamily = "Samsung One 600"; // Medium
-                    underline.Position = new Position(TARGET_WIDTH / 2 + 35 * scaleX, 30 * scaleY); // Centered under DESSERTS
+                    // Center of DESSERT tab
+                    float dessertCenter = startX + appetizersWidth + tabMargin + entreesWidth + tabMargin + dessertWidth / 2;
+                    underline.Position = new Position(dessertCenter - 27 * scaleX, 30 * scaleY);
                     break;
             }
         }
