@@ -220,7 +220,7 @@ namespace RecipeApp
                 PivotPoint = new Vector3(0.5f, 0.5f, 0.5f)
             };
 
-            // Create category labels with equal spacing for perfect centering
+            // Create category labels with adjusted spacing to keep all tabs on screen
             appetizersLabel = new TextLabel()
             {
                 Text = "APPETIZERS",
@@ -231,7 +231,7 @@ namespace RecipeApp
                 VerticalAlignment = VerticalAlignment.Center,
                 WidthSpecification = LayoutParamPolicies.WrapContent,
                 HeightSpecification = LayoutParamPolicies.WrapContent,
-                Margin = new Extents(0, (ushort)(30 * scaleX), 0, 0) // Increased right margin for better spacing
+                Margin = new Extents(0, (ushort)(25 * scaleX), 0, 0) // Reduced margin to fit on screen
             };
 
             // Add touch event for appetizers category
@@ -254,7 +254,7 @@ namespace RecipeApp
                 VerticalAlignment = VerticalAlignment.Center,
                 WidthSpecification = LayoutParamPolicies.WrapContent,
                 HeightSpecification = LayoutParamPolicies.WrapContent,
-                Margin = new Extents((ushort)(30 * scaleX), (ushort)(30 * scaleX), 0, 0) // Equal margins left and right for center positioning
+                Margin = new Extents((ushort)(25 * scaleX), (ushort)(25 * scaleX), 0, 0) // Reduced margins to fit better
             };
 
             // Add touch event for entrees category
@@ -277,7 +277,7 @@ namespace RecipeApp
                 VerticalAlignment = VerticalAlignment.Center,
                 WidthSpecification = LayoutParamPolicies.WrapContent,
                 HeightSpecification = LayoutParamPolicies.WrapContent,
-                Margin = new Extents((ushort)(30 * scaleX), 0, 0, 0) // Increased left margin for better spacing
+                Margin = new Extents((ushort)(25 * scaleX), 0, 0, 0) // Reduced margin to fit on screen
             };
 
             // Add touch event for dessert category
@@ -338,6 +338,8 @@ namespace RecipeApp
             carouselImageView.TouchEvent += OnCarouselTouch;
             carouselContainer.Add(carouselImageView);
 
+            // Navigation dots hidden as requested
+            /*
             // Create navigation dots container
             dotsContainer = new View()
             {
@@ -364,6 +366,7 @@ namespace RecipeApp
                 };
                 dotsContainer.Add(dot);
             }
+            */
 
             // Create heart button
             var heartButton = new ImageView()
@@ -439,7 +442,7 @@ namespace RecipeApp
             starContainer.Add(star4);
             starContainer.Add(star5);
 
-            // Create recipe title (will be updated dynamically)
+            // Create recipe title (will be updated dynamically) - center aligned
             carouselTitleLabel = new TextLabel()
             {
                 Text = recipeTitles[currentImageIndex],
@@ -448,7 +451,9 @@ namespace RecipeApp
                 PointSize = 18f / FONT_SCALE, // 18px to points
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
-                Position = new Position(123 * scaleX, 264 * scaleY), // Scaled from left: 123px, top: 390px
+                WidthSpecification = LayoutParamPolicies.MatchParent,
+                HeightSpecification = LayoutParamPolicies.WrapContent,
+                Position = new Position(0, 264 * scaleY), // Centered horizontally
                 PositionUsesPivotPoint = false
             };
 
@@ -587,7 +592,6 @@ namespace RecipeApp
 
             // Add all components to recipe container
             recipeContainer.Add(carouselContainer);
-            recipeContainer.Add(dotsContainer);
             recipeContainer.Add(heartButton);
             recipeContainer.Add(starContainer);
             recipeContainer.Add(carouselTitleLabel);
@@ -636,31 +640,7 @@ namespace RecipeApp
             };
             fadeOutAnimation.Play();
 
-            // Recreate navigation dots for the current category
-            RecreateNavigationDots();
-        }
-
-        private void RecreateNavigationDots()
-        {
-            // Clear existing dots
-            while (dotsContainer.ChildCount > 0)
-            {
-                var child = dotsContainer.GetChildAt(0);
-                dotsContainer.Remove(child);
-            }
-
-            // Create new dots for current category
-            for (int i = 0; i < carouselImages.Length; i++)
-            {
-                var dot = new View()
-                {
-                    Size = new Size(8 * scaleX, 8 * scaleY),
-                    BackgroundColor = i == currentImageIndex ? Color.Black : new Color(0.7f, 0.7f, 0.7f, 1.0f),
-                    CornerRadius = 4 * scaleX,
-                    Margin = new Extents(0, (ushort)(4 * scaleX), 0, 0)
-                };
-                dotsContainer.Add(dot);
-            }
+            // Navigation dots are hidden, so no need to recreate them
         }
 
         private void ShowToast(string message)
@@ -744,13 +724,13 @@ namespace RecipeApp
             dessertLabel.TextColor = new Color(0.45f, 0.45f, 0.45f, 1.0f); // #737373
             dessertLabel.FontFamily = "Samsung One 400"; // Regular
 
-            // Set active tab styling with adjusted underline positions
+            // Set active tab styling with adjusted underline positions for smaller margins
             switch (currentCategoryIndex)
             {
                 case 0: // APPETIZERS
                     appetizersLabel.TextColor = Color.Black;
                     appetizersLabel.FontFamily = "Samsung One 600"; // Medium
-                    underline.Position = new Position(TARGET_WIDTH / 2 - 135 * scaleX, 30 * scaleY); // Adjusted for appetizers
+                    underline.Position = new Position(TARGET_WIDTH / 2 - 120 * scaleX, 30 * scaleY); // Adjusted for smaller margins
                     break;
                 case 1: // ENTREES
                     entreesLabel.TextColor = Color.Black;
@@ -760,7 +740,7 @@ namespace RecipeApp
                 case 2: // DESSERTS
                     dessertLabel.TextColor = Color.Black;
                     dessertLabel.FontFamily = "Samsung One 600"; // Medium
-                    underline.Position = new Position(TARGET_WIDTH / 2 + 80 * scaleX, 30 * scaleY); // Adjusted for desserts
+                    underline.Position = new Position(TARGET_WIDTH / 2 + 65 * scaleX, 30 * scaleY); // Adjusted for smaller margins
                     break;
             }
         }
