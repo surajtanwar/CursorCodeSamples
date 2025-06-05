@@ -70,7 +70,10 @@ namespace RecipeApp
         private ImageView carouselImageView;
         private TextLabel carouselTitleLabel;
         private TextLabel carouselDescriptionLabel;
-        private View dotsContainer;
+        
+        // Side mask group images for enhanced visual depth
+        private ImageView leftMaskGroup;
+        private ImageView rightMaskGroup;
         
         // Tab references for dynamic styling
         private TextLabel appetizersLabel;
@@ -111,6 +114,22 @@ namespace RecipeApp
             // Show category switch notification
             string[] categoryNames = { "Appetizers", "Entrees", "Desserts" };
             ShowToast($"Switched to {categoryNames[currentCategoryIndex]} category");
+        }
+
+        private string GetLeftMaskImage()
+        {
+            // Return appropriate left mask image based on current category and position
+            // Use images from adjacent positions for visual depth
+            int leftIndex = (currentImageIndex - 1 + carouselImages.Length) % carouselImages.Length;
+            return carouselImages[leftIndex];
+        }
+
+        private string GetRightMaskImage()
+        {
+            // Return appropriate right mask image based on current category and position
+            // Use images from adjacent positions for visual depth
+            int rightIndex = (currentImageIndex + 1) % carouselImages.Length;
+            return carouselImages[rightIndex];
         }
 
         private string GetResourcePath(string resourceName)
@@ -182,18 +201,18 @@ namespace RecipeApp
                 return true;
             };
 
-            // Create "POPULAR RECIPES" header - centered at top
+            // Create "POPULAR RECIPES" header - positioned to be visible
             var popularRecipesLabel = new TextLabel()
             {
                 Text = "POPULAR RECIPES",
                 TextColor = new Color(0.92f, 0.34f, 0.34f, 1.0f), // #eb5757
                 FontFamily = "Samsung One 700", // Roboto-Bold equivalent
-                PointSize = 20f / FONT_SCALE, // Increased from 18px to 20px for better visibility
+                PointSize = 18f / FONT_SCALE, // Reduced by 2 points (was 20f, now 18f)
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
                 WidthSpecification = LayoutParamPolicies.MatchParent,
                 HeightSpecification = LayoutParamPolicies.WrapContent,
-                Position = new Position(0, 50 * scaleY), // Moved down from top edge
+                Position = new Position(0, 80 * scaleY), // Moved further down to be visible
                 PositionUsesPivotPoint = false
             };
 
@@ -202,7 +221,7 @@ namespace RecipeApp
             {
                 WidthSpecification = LayoutParamPolicies.MatchParent,
                 HeightSpecification = LayoutParamPolicies.WrapContent,
-                Position = new Position(0, 100 * scaleY), // Adjusted to accommodate moved header
+                Position = new Position(0, 130 * scaleY), // Adjusted for moved header
                 PositionUsesPivotPoint = false
             };
 
@@ -220,18 +239,18 @@ namespace RecipeApp
                 PivotPoint = new Vector3(0.5f, 0.5f, 0.5f)
             };
 
-            // Create category labels with adjusted spacing to keep all tabs on screen
+            // Create category labels with evenly distributed spacing for better center alignment
             appetizersLabel = new TextLabel()
             {
                 Text = "APPETIZERS",
                 TextColor = new Color(0.45f, 0.45f, 0.45f, 1.0f), // #737373
                 FontFamily = "Samsung One 400", // Roboto-Regular
-                PointSize = 10.3f / FONT_SCALE, // Reduced by 2 points (was 13px, now 10.3px)
+                PointSize = 10.3f / FONT_SCALE, // Keep tab font size unchanged
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
                 WidthSpecification = LayoutParamPolicies.WrapContent,
                 HeightSpecification = LayoutParamPolicies.WrapContent,
-                Margin = new Extents(0, (ushort)(25 * scaleX), 0, 0) // Reduced margin to fit on screen
+                Margin = new Extents(0, (ushort)(25 * scaleX), 0, 0) // Even right margin
             };
 
             // Add touch event for appetizers category
@@ -249,12 +268,12 @@ namespace RecipeApp
                 Text = "ENTREES",
                 TextColor = Color.Black, // #000000
                 FontFamily = "Samsung One 600", // Roboto-Medium
-                PointSize = 10.3f / FONT_SCALE, // Reduced by 2 points (was 13px, now 10.3px)
+                PointSize = 10.3f / FONT_SCALE, // Keep tab font size unchanged
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
                 WidthSpecification = LayoutParamPolicies.WrapContent,
                 HeightSpecification = LayoutParamPolicies.WrapContent,
-                Margin = new Extents((ushort)(25 * scaleX), (ushort)(25 * scaleX), 0, 0) // Reduced margins to fit better
+                Margin = new Extents(0, (ushort)(25 * scaleX), 0, 0) // Even margins for center alignment
             };
 
             // Add touch event for entrees category
@@ -272,12 +291,12 @@ namespace RecipeApp
                 Text = "DESSERT",
                 TextColor = new Color(0.45f, 0.45f, 0.45f, 1.0f), // #737373
                 FontFamily = "Samsung One 400", // Roboto-Regular
-                PointSize = 10.3f / FONT_SCALE, // Reduced by 2 points (was 13px, now 10.3px)
+                PointSize = 10.3f / FONT_SCALE, // Keep tab font size unchanged
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
                 WidthSpecification = LayoutParamPolicies.WrapContent,
                 HeightSpecification = LayoutParamPolicies.WrapContent,
-                Margin = new Extents((ushort)(25 * scaleX), 0, 0, 0) // Reduced margin to fit on screen
+                Margin = new Extents(0, 0, 0, 0) // No margin for last tab
             };
 
             // Add touch event for dessert category
@@ -290,7 +309,7 @@ namespace RecipeApp
                 return true;
             };
 
-            // Create underline for selected category (ENTREES) - positioned relative to entreesLabel
+            // Create underline for selected category - positioned to align with tab centers
             underline = new View()
             {
                 BackgroundColor = Color.Black,
@@ -311,7 +330,7 @@ namespace RecipeApp
             var recipeContainer = new View()
             {
                 Size = new Size(TARGET_WIDTH, 500 * scaleY),
-                Position = new Position(0, 160 * scaleY), // Adjusted to maintain spacing
+                Position = new Position(0, 190 * scaleY), // Adjusted for moved header and tabs
                 PositionUsesPivotPoint = false
             };
 
@@ -337,6 +356,21 @@ namespace RecipeApp
             // Add touch events for carousel navigation
             carouselImageView.TouchEvent += OnCarouselTouch;
             carouselContainer.Add(carouselImageView);
+
+            // Create side mask group images for enhanced visual depth
+            leftMaskGroup = new ImageView()
+            {
+                ResourceUrl = GetResourcePath(GetLeftMaskImage()),
+                Position = new Position(-133 * scaleX, 10 * scaleY), // Scaled from original position
+                PositionUsesPivotPoint = false
+            };
+
+            rightMaskGroup = new ImageView()
+            {
+                ResourceUrl = GetResourcePath(GetRightMaskImage()),
+                Position = new Position(308 * scaleX, 10 * scaleY), // Scaled from original position
+                PositionUsesPivotPoint = false
+            };
 
             // Navigation dots hidden as requested
             /*
@@ -448,7 +482,7 @@ namespace RecipeApp
                 Text = recipeTitles[currentImageIndex],
                 TextColor = new Color(0.098f, 0.349f, 0.49f, 1.0f), // #19597d
                 FontFamily = "Samsung One 700", // Roboto-Bold
-                PointSize = 18f / FONT_SCALE, // 18px to points
+                PointSize = 16f / FONT_SCALE, // Reduced by 2 points (was 18f, now 16f)
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
                 WidthSpecification = LayoutParamPolicies.MatchParent,
@@ -457,7 +491,7 @@ namespace RecipeApp
                 PositionUsesPivotPoint = false
             };
 
-            // Create stats container with horizontal layout
+            // Create stats container with horizontal layout - positioned with gap from title
             var statsContainer = new View()
             {
                 Layout = new LinearLayout()
@@ -466,7 +500,7 @@ namespace RecipeApp
                 },
                 WidthSpecification = LayoutParamPolicies.WrapContent,
                 HeightSpecification = LayoutParamPolicies.WrapContent,
-                Position = new Position(TARGET_WIDTH / 2, 301 * scaleY), // Centered horizontally
+                Position = new Position(TARGET_WIDTH / 2, 320 * scaleY), // Added gap from title (was 301, now 320)
                 PositionUsesPivotPoint = true,
                 PivotPoint = new Vector3(0.5f, 0.5f, 0.5f)
             };
@@ -495,7 +529,7 @@ namespace RecipeApp
                 Text = "5HR",
                 TextColor = Color.Black,
                 FontFamily = "Samsung One 400", // Roboto-Regular
-                PointSize = 14f / FONT_SCALE, // 14px to points
+                PointSize = 12f / FONT_SCALE, // Reduced by 2 points (was 14f, now 12f)
                 VerticalAlignment = VerticalAlignment.Center,
                 WidthSpecification = LayoutParamPolicies.WrapContent,
                 HeightSpecification = LayoutParamPolicies.WrapContent
@@ -528,7 +562,7 @@ namespace RecipeApp
                 Text = "685",
                 TextColor = Color.Black,
                 FontFamily = "Samsung One 400", // Roboto-Regular
-                PointSize = 14f / FONT_SCALE, // 14px to points
+                PointSize = 12f / FONT_SCALE, // Reduced by 2 points (was 14f, now 12f)
                 VerticalAlignment = VerticalAlignment.Center,
                 WidthSpecification = LayoutParamPolicies.WrapContent,
                 HeightSpecification = LayoutParamPolicies.WrapContent
@@ -560,7 +594,7 @@ namespace RecipeApp
                 Text = "107",
                 TextColor = Color.Black,
                 FontFamily = "Samsung One 400", // Roboto-Regular
-                PointSize = 14f / FONT_SCALE, // 14px to points
+                PointSize = 12f / FONT_SCALE, // Reduced by 2 points (was 14f, now 12f)
                 VerticalAlignment = VerticalAlignment.Center,
                 WidthSpecification = LayoutParamPolicies.WrapContent,
                 HeightSpecification = LayoutParamPolicies.WrapContent
@@ -574,24 +608,26 @@ namespace RecipeApp
             statsContainer.Add(caloriesStatContainer);
             statsContainer.Add(servingsStatContainer);
 
-            // Create description text (will be updated dynamically)
+            // Create description text (will be updated dynamically) - font reduced by 2 points
             carouselDescriptionLabel = new TextLabel()
             {
                 Text = recipeDescriptions[currentImageIndex],
                 TextColor = new Color(0.46f, 0.46f, 0.46f, 1.0f), // #757575
                 FontFamily = "Samsung One 400", // Roboto-Regular
-                PointSize = 14f / FONT_SCALE, // 14px to points
+                PointSize = 12f / FONT_SCALE, // Reduced by 2 points (was 14f, now 12f)
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Top,
                 MultiLine = true,
                 LineWrapMode = LineWrapMode.Word,
                 Size = new Size(335 * scaleX, 150 * scaleY), // Scaled from width: 335px
-                Position = new Position(21 * scaleX, 336 * scaleY), // Scaled from left: 21px, top: 462px
+                Position = new Position(21 * scaleX, 360 * scaleY), // Adjusted for gap (was 336, now 360)
                 PositionUsesPivotPoint = false
             };
 
             // Add all components to recipe container
             recipeContainer.Add(carouselContainer);
+            recipeContainer.Add(leftMaskGroup);
+            recipeContainer.Add(rightMaskGroup);
             recipeContainer.Add(heartButton);
             recipeContainer.Add(starContainer);
             recipeContainer.Add(carouselTitleLabel);
@@ -634,6 +670,10 @@ namespace RecipeApp
                 carouselTitleLabel.Text = recipeTitles[currentImageIndex];
                 carouselDescriptionLabel.Text = recipeDescriptions[currentImageIndex];
                 
+                // Update mask group images
+                leftMaskGroup.ResourceUrl = GetResourcePath(GetLeftMaskImage());
+                rightMaskGroup.ResourceUrl = GetResourcePath(GetRightMaskImage());
+                
                 var fadeInAnimation = new Animation(300);
                 fadeInAnimation.AnimateTo(carouselImageView, "Opacity", 1.0f);
                 fadeInAnimation.Play();
@@ -666,7 +706,7 @@ namespace RecipeApp
             {
                 Text = message,
                 TextColor = Color.White,
-                PointSize = 14f / FONT_SCALE,
+                PointSize = 12f / FONT_SCALE, // Reduced by 2 points (was 14f, now 12f)
                 FontFamily = "Samsung One 400",
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
@@ -724,23 +764,23 @@ namespace RecipeApp
             dessertLabel.TextColor = new Color(0.45f, 0.45f, 0.45f, 1.0f); // #737373
             dessertLabel.FontFamily = "Samsung One 400"; // Regular
 
-            // Set active tab styling with adjusted underline positions for smaller margins
+            // Set active tab styling with properly aligned underline positions for centered tabs
             switch (currentCategoryIndex)
             {
                 case 0: // APPETIZERS
                     appetizersLabel.TextColor = Color.Black;
                     appetizersLabel.FontFamily = "Samsung One 600"; // Medium
-                    underline.Position = new Position(TARGET_WIDTH / 2 - 120 * scaleX, 30 * scaleY); // Adjusted for smaller margins
+                    underline.Position = new Position(TARGET_WIDTH / 2 - 90 * scaleX, 30 * scaleY); // Centered under APPETIZERS
                     break;
                 case 1: // ENTREES
                     entreesLabel.TextColor = Color.Black;
                     entreesLabel.FontFamily = "Samsung One 600"; // Medium
-                    underline.Position = new Position(TARGET_WIDTH / 2 - 27 * scaleX, 30 * scaleY); // Center position
+                    underline.Position = new Position(TARGET_WIDTH / 2 - 27 * scaleX, 30 * scaleY); // Centered under ENTREES
                     break;
                 case 2: // DESSERTS
                     dessertLabel.TextColor = Color.Black;
                     dessertLabel.FontFamily = "Samsung One 600"; // Medium
-                    underline.Position = new Position(TARGET_WIDTH / 2 + 65 * scaleX, 30 * scaleY); // Adjusted for smaller margins
+                    underline.Position = new Position(TARGET_WIDTH / 2 + 35 * scaleX, 30 * scaleY); // Centered under DESSERTS
                     break;
             }
         }
