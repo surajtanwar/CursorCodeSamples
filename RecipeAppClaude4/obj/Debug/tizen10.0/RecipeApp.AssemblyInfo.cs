@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute("A sample recipe application for Tizen")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1fffd276e39f633dbe6f37405ccd6998b793eb8e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+acbcc959f55f321d1fcbc5209dbfce82236b7785")]
 [assembly: System.Reflection.AssemblyProductAttribute("RecipeApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RecipeApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -71,7 +71,6 @@ namespace RecipeApp
         private TextLabel carouselTitleLabel;
         private TextLabel carouselDescriptionLabel;
         private View dotsContainer;
-        private Timer carouselTimer;
         
         // Tab references for dynamic styling
         private TextLabel appetizersLabel;
@@ -108,10 +107,6 @@ namespace RecipeApp
             
             // Update tab styling
             UpdateTabStyling();
-            
-            // Restart carousel timer
-            carouselTimer?.Stop();
-            StartCarouselTimer();
             
             // Show category switch notification
             string[] categoryNames = { "Appetizers", "Entrees", "Desserts" };
@@ -225,18 +220,18 @@ namespace RecipeApp
                 PivotPoint = new Vector3(0.5f, 0.5f, 0.5f)
             };
 
-            // Create category labels
+            // Create category labels with equal spacing for perfect centering
             appetizersLabel = new TextLabel()
             {
                 Text = "APPETIZERS",
                 TextColor = new Color(0.45f, 0.45f, 0.45f, 1.0f), // #737373
                 FontFamily = "Samsung One 400", // Roboto-Regular
-                PointSize = 13f / FONT_SCALE, // 13px to points
+                PointSize = 10.3f / FONT_SCALE, // Reduced by 2 points (was 13px, now 10.3px)
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
                 WidthSpecification = LayoutParamPolicies.WrapContent,
                 HeightSpecification = LayoutParamPolicies.WrapContent,
-                Margin = new Extents(0, (ushort)(20 * scaleX), 0, 0) // Right margin for spacing
+                Margin = new Extents(0, (ushort)(30 * scaleX), 0, 0) // Increased right margin for better spacing
             };
 
             // Add touch event for appetizers category
@@ -254,12 +249,12 @@ namespace RecipeApp
                 Text = "ENTREES",
                 TextColor = Color.Black, // #000000
                 FontFamily = "Samsung One 600", // Roboto-Medium
-                PointSize = 13f / FONT_SCALE, // 13px to points
+                PointSize = 10.3f / FONT_SCALE, // Reduced by 2 points (was 13px, now 10.3px)
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
                 WidthSpecification = LayoutParamPolicies.WrapContent,
                 HeightSpecification = LayoutParamPolicies.WrapContent,
-                Margin = new Extents((ushort)(20 * scaleX), (ushort)(20 * scaleX), 0, 0) // Left and right margins for spacing
+                Margin = new Extents((ushort)(30 * scaleX), (ushort)(30 * scaleX), 0, 0) // Equal margins left and right for center positioning
             };
 
             // Add touch event for entrees category
@@ -277,12 +272,12 @@ namespace RecipeApp
                 Text = "DESSERT",
                 TextColor = new Color(0.45f, 0.45f, 0.45f, 1.0f), // #737373
                 FontFamily = "Samsung One 400", // Roboto-Regular
-                PointSize = 13f / FONT_SCALE, // 13px to points
+                PointSize = 10.3f / FONT_SCALE, // Reduced by 2 points (was 13px, now 10.3px)
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
                 WidthSpecification = LayoutParamPolicies.WrapContent,
                 HeightSpecification = LayoutParamPolicies.WrapContent,
-                Margin = new Extents((ushort)(20 * scaleX), 0, 0, 0) // Left margin for spacing
+                Margin = new Extents((ushort)(30 * scaleX), 0, 0, 0) // Increased left margin for better spacing
             };
 
             // Add touch event for dessert category
@@ -615,22 +610,7 @@ namespace RecipeApp
             // Set initial tab styling
             UpdateTabStyling();
 
-            // Start automatic carousel rotation
-            StartCarouselTimer();
-        }
-
-        private void StartCarouselTimer()
-        {
-            carouselTimer = new Timer(4000); // 4 seconds per image
-            carouselTimer.Tick += OnCarouselTimerTick;
-            carouselTimer.Start();
-        }
-
-        private bool OnCarouselTimerTick(object sender, Timer.TickEventArgs e)
-        {
-            // Auto-navigate to next image
-            NextCarouselImage();
-            return true; // Continue the timer
+            // Note: Automatic carousel rotation disabled - only manual navigation via touch
         }
 
         private void NextCarouselImage()
@@ -744,23 +724,10 @@ namespace RecipeApp
         {
             if (e.Touch.GetState(0) == PointStateType.Up)
             {
-                // Stop automatic rotation temporarily
-                carouselTimer?.Stop();
-                
                 // Navigate to next image on touch
                 NextCarouselImage();
 
                 ShowToast($"Switched to: {recipeTitles[currentImageIndex]}");
-
-                // Restart automatic rotation after a delay
-                var restartTimer = new Timer(2000); // 2 second delay
-                restartTimer.Tick += (s, args) =>
-                {
-                    StartCarouselTimer();
-                    restartTimer.Stop();
-                    return false;
-                };
-                restartTimer.Start();
             }
             return true;
         }
@@ -777,23 +744,23 @@ namespace RecipeApp
             dessertLabel.TextColor = new Color(0.45f, 0.45f, 0.45f, 1.0f); // #737373
             dessertLabel.FontFamily = "Samsung One 400"; // Regular
 
-            // Set active tab styling
+            // Set active tab styling with adjusted underline positions
             switch (currentCategoryIndex)
             {
                 case 0: // APPETIZERS
                     appetizersLabel.TextColor = Color.Black;
                     appetizersLabel.FontFamily = "Samsung One 600"; // Medium
-                    underline.Position = new Position(TARGET_WIDTH / 2 - 122.5f * scaleX + 30 * scaleX, 30 * scaleY);
+                    underline.Position = new Position(TARGET_WIDTH / 2 - 135 * scaleX, 30 * scaleY); // Adjusted for appetizers
                     break;
                 case 1: // ENTREES
                     entreesLabel.TextColor = Color.Black;
                     entreesLabel.FontFamily = "Samsung One 600"; // Medium
-                    underline.Position = new Position(TARGET_WIDTH / 2 - 27 * scaleX, 30 * scaleY);
+                    underline.Position = new Position(TARGET_WIDTH / 2 - 27 * scaleX, 30 * scaleY); // Center position
                     break;
                 case 2: // DESSERTS
                     dessertLabel.TextColor = Color.Black;
                     dessertLabel.FontFamily = "Samsung One 600"; // Medium
-                    underline.Position = new Position(TARGET_WIDTH / 2 + 67.5f * scaleX - 20 * scaleX, 30 * scaleY);
+                    underline.Position = new Position(TARGET_WIDTH / 2 + 80 * scaleX, 30 * scaleY); // Adjusted for desserts
                     break;
             }
         }
