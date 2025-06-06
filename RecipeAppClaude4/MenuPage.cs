@@ -17,6 +17,10 @@ namespace RecipeApp
         private const float TARGET_WIDTH = 720f;
         private const float TARGET_HEIGHT = 1280f;
         
+        // Original design dimensions for scaling calculations
+        private const float ORIGINAL_WIDTH = 375f;
+        private const float ORIGINAL_HEIGHT = 667f;
+        
         // Font scaling factor (1 point = 1.33px)
         private const float FONT_SCALE = 1.33f;
 
@@ -51,19 +55,32 @@ namespace RecipeApp
 
         private void Initialize()
         {
-            // Set up the main menu container as a full-screen overlay
+            // Set up the main menu container for 720x1280 resolution
             WidthSpecification = LayoutParamPolicies.MatchParent;
             HeightSpecification = LayoutParamPolicies.MatchParent;
-            BackgroundColor = new Color(0.92f, 0.34f, 0.34f, 1.0f); // Full red background like menu.png
+            BackgroundColor = Color.White; // Background: #ffffff as per CSS
             Position = new Position(0, 0);
             PositionUsesPivotPoint = false;
 
-            // Create menu button (close button) - positioned in the top right corner
+            // Calculate scale factors from original 375x667 to 720x1280
+            float scaleX = TARGET_WIDTH / ORIGINAL_WIDTH;  // 1.92
+            float scaleY = TARGET_HEIGHT / ORIGINAL_HEIGHT; // 1.919
+
+            // Create red rectangle - scaled from CSS: width: 320px, height: 667px, left: -1px, top: 0px
+            var redRectangle = new View()
+            {
+                BackgroundColor = new Color(0.92f, 0.34f, 0.34f, 1.0f), // #eb5757
+                Size = new Size(320 * scaleX, TARGET_HEIGHT), // 614px width, full height
+                Position = new Position(-1 * scaleX, 0), // Scaled from left: -1px
+                PositionUsesPivotPoint = false
+            };
+
+            // Create menu button - scaled from CSS: 24x18px at (340, 10)
             var menuButton = new ImageView()
             {
                 ResourceUrl = GetResourcePath("btn-menu0.svg"),
-                Size = new Size(32, 24), // Slightly larger for better visibility
-                Position = new Position(TARGET_WIDTH - 60, 40), // Top right corner
+                Size = new Size(24 * scaleX, 18 * scaleY), // 46x34px
+                Position = new Position(340 * scaleX, 10 * scaleY), // (653, 19)
                 PositionUsesPivotPoint = false
             };
 
@@ -77,151 +94,105 @@ namespace RecipeApp
                 return true;
             };
 
-            // Create white selection indicator line for POPULAR RECIPES
-            var decorativeLine = new View()
+            // Create menu items text - scaled from CSS: 20px font at (30, 71)
+            var menuItemsText = new TextLabel()
             {
-                BackgroundColor = Color.White,
-                Size = new Size(6, 30), // Slightly thicker line
-                Position = new Position(40, 120), // Left side margin
-                PositionUsesPivotPoint = false
-            };
-
-            // Create individual menu item labels for better control and visibility
-            var popularRecipesLabel = new TextLabel()
-            {
-                Text = "POPULAR RECIPES",
-                TextColor = Color.White,
-                FontFamily = "Samsung One 600",
-                PointSize = 22f, // Large, clear text
+                Text = "POPULAR RECIPES\nSAVED RECIPES\nSHOPPING LIST\nSETTINGS",
+                TextColor = Color.White, // color: #ffffff
+                FontFamily = "Samsung One 600", // Roboto-Medium equivalent
+                PointSize = 20f / FONT_SCALE, // 20px / 1.33 = 15.04pt
                 HorizontalAlignment = HorizontalAlignment.Begin,
-                VerticalAlignment = VerticalAlignment.Center,
-                Position = new Position(60, 115),
+                VerticalAlignment = VerticalAlignment.Top,
+                MultiLine = true,
+                LineWrapMode = LineWrapMode.Word,
+                Position = new Position(30 * scaleX, 71 * scaleY), // (58, 136)
                 PositionUsesPivotPoint = false,
                 WidthSpecification = LayoutParamPolicies.WrapContent,
                 HeightSpecification = LayoutParamPolicies.WrapContent
             };
 
-            var savedRecipesLabel = new TextLabel()
-            {
-                Text = "SAVED RECIPES",
-                TextColor = Color.White,
-                FontFamily = "Samsung One 400",
-                PointSize = 22f,
-                HorizontalAlignment = HorizontalAlignment.Begin,
-                VerticalAlignment = VerticalAlignment.Center,
-                Position = new Position(60, 180),
-                PositionUsesPivotPoint = false,
-                WidthSpecification = LayoutParamPolicies.WrapContent,
-                HeightSpecification = LayoutParamPolicies.WrapContent
-            };
+            // Add touch events for menu items
+            menuItemsText.TouchEvent += OnMenuItemTouch;
 
-            var shoppingListLabel = new TextLabel()
-            {
-                Text = "SHOPPING LIST",
-                TextColor = Color.White,
-                FontFamily = "Samsung One 400",
-                PointSize = 22f,
-                HorizontalAlignment = HorizontalAlignment.Begin,
-                VerticalAlignment = VerticalAlignment.Center,
-                Position = new Position(60, 245),
-                PositionUsesPivotPoint = false,
-                WidthSpecification = LayoutParamPolicies.WrapContent,
-                HeightSpecification = LayoutParamPolicies.WrapContent
-            };
-
-            var settingsLabel = new TextLabel()
-            {
-                Text = "SETTINGS",
-                TextColor = Color.White,
-                FontFamily = "Samsung One 400",
-                PointSize = 22f,
-                HorizontalAlignment = HorizontalAlignment.Begin,
-                VerticalAlignment = VerticalAlignment.Center,
-                Position = new Position(60, 310),
-                PositionUsesPivotPoint = false,
-                WidthSpecification = LayoutParamPolicies.WrapContent,
-                HeightSpecification = LayoutParamPolicies.WrapContent
-            };
-
-            // Add touch events to individual labels
-            popularRecipesLabel.TouchEvent += (sender, e) =>
-            {
-                if (e.Touch.GetState(0) == PointStateType.Up)
-                {
-                    ShowToast("Popular Recipes selected");
-                }
-                return true;
-            };
-
-            savedRecipesLabel.TouchEvent += (sender, e) =>
-            {
-                if (e.Touch.GetState(0) == PointStateType.Up)
-                {
-                    ShowToast("Saved Recipes selected");
-                }
-                return true;
-            };
-
-            shoppingListLabel.TouchEvent += (sender, e) =>
-            {
-                if (e.Touch.GetState(0) == PointStateType.Up)
-                {
-                    ShowToast("Shopping List selected");
-                }
-                return true;
-            };
-
-            settingsLabel.TouchEvent += (sender, e) =>
-            {
-                if (e.Touch.GetState(0) == PointStateType.Up)
-                {
-                    ShowToast("Settings selected");
-                }
-                return true;
-            };
-
-            // Create profile image at the bottom
+            // Create profile image - scaled from CSS: 46x46px at (29, 552)
             var profileImage = new ImageView()
             {
                 ResourceUrl = GetResourcePath("ellipse0.png"),
-                Size = new Size(60, 60),
-                Position = new Position(40, TARGET_HEIGHT - 140),
+                Size = new Size(46 * scaleX, 46 * scaleY), // 88x88px
+                Position = new Position(29 * scaleX, 552 * scaleY), // (56, 1060)
                 PositionUsesPivotPoint = false,
-                CornerRadius = 30
+                CornerRadius = (46 * scaleX) / 2 // Make it circular
             };
 
-            // Create user name below profile
-            var userNameLabel = new TextLabel()
+            // Create user name text - scaled from CSS: 20px font at (30, 616)
+            var userNameText = new TextLabel()
             {
                 Text = "HARRY TRUMAN",
-                TextColor = Color.White,
-                FontFamily = "Samsung One 600",
-                PointSize = 18f,
+                TextColor = Color.White, // color: #ffffff
+                FontFamily = "Samsung One 600", // Roboto-Medium equivalent
+                PointSize = 20f / FONT_SCALE, // 20px / 1.33 = 15.04pt
                 HorizontalAlignment = HorizontalAlignment.Begin,
                 VerticalAlignment = VerticalAlignment.Center,
-                Position = new Position(40, TARGET_HEIGHT - 70),
+                Position = new Position(30 * scaleX, 616 * scaleY), // (58, 1182)
                 PositionUsesPivotPoint = false,
                 WidthSpecification = LayoutParamPolicies.WrapContent,
                 HeightSpecification = LayoutParamPolicies.WrapContent
             };
 
-            // Add all components to the menu page
-            Add(decorativeLine);
-            Add(popularRecipesLabel);
-            Add(savedRecipesLabel);
-            Add(shoppingListLabel);
-            Add(settingsLabel);
+            // Create selection line - scaled from CSS: 30px width, 5px border at (16, 68), rotated 90deg
+            var selectionLine = new View()
+            {
+                BackgroundColor = Color.White, // border-color: #ffffff
+                Size = new Size(5 * scaleX, 30 * scaleY), // Rotated: 5px width becomes height, 30px height becomes width
+                Position = new Position(16 * scaleX, 68 * scaleY), // (31, 130)
+                PositionUsesPivotPoint = false
+            };
+
+            // Add all components to the menu page in correct order
+            Add(redRectangle);
+            Add(selectionLine);
+            Add(menuItemsText);
             Add(profileImage);
-            Add(userNameLabel);
+            Add(userNameText);
             Add(menuButton);
 
-            // Start with the menu off-screen (slide-in effect)
+            // Set up slide-in animation from the left
             Position = new Position(-TARGET_WIDTH, 0);
-            
-            // Slide in animation
-            var slideInAnimation = new Animation(300);
+            var slideInAnimation = new Animation(300); // 0.3 second slide-in
             slideInAnimation.AnimateTo(this, "Position", new Position(0, 0));
             slideInAnimation.Play();
+        }
+
+        private bool OnMenuItemTouch(object sender, View.TouchEventArgs e)
+        {
+            if (e.Touch.GetState(0) == PointStateType.Up)
+            {
+                // Calculate scale factors for touch detection
+                float scaleY = TARGET_HEIGHT / ORIGINAL_HEIGHT;
+                
+                // Determine which menu item was touched based on Y position
+                // CSS positions: menu text starts at 71px with 20px font, line spacing
+                float touchY = e.Touch.GetLocalPosition(0).Y;
+                string selectedItem = "";
+                
+                float menuStartY = 71 * scaleY; // 136px
+                float lineHeight = 25 * scaleY; // Approximate line height with spacing
+                
+                if (touchY >= menuStartY && touchY < menuStartY + lineHeight)
+                    selectedItem = "Popular Recipes";
+                else if (touchY >= menuStartY + lineHeight && touchY < menuStartY + 2 * lineHeight)
+                    selectedItem = "Saved Recipes";
+                else if (touchY >= menuStartY + 2 * lineHeight && touchY < menuStartY + 3 * lineHeight)
+                    selectedItem = "Shopping List";
+                else if (touchY >= menuStartY + 3 * lineHeight && touchY < menuStartY + 4 * lineHeight)
+                    selectedItem = "Settings";
+
+                if (!string.IsNullOrEmpty(selectedItem))
+                {
+                    ShowToast($"{selectedItem} selected");
+                }
+            }
+            return true;
         }
 
         private void ShowToast(string message)
