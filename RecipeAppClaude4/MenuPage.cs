@@ -58,7 +58,8 @@ namespace RecipeApp
             // Set up the main menu container for 720x1280 resolution
             WidthSpecification = LayoutParamPolicies.MatchParent;
             HeightSpecification = LayoutParamPolicies.MatchParent;
-            BackgroundColor = Color.White; // Background: #ffffff as per CSS
+            BackgroundColor = Color.White; 
+            Size = new Size(TARGET_WIDTH, TARGET_HEIGHT); // Background: #ffffff as per CSS
             Position = new Position(0, 0);
             PositionUsesPivotPoint = false;
 
@@ -141,16 +142,16 @@ namespace RecipeApp
             // Create menu items text - scaled from CSS: 20px font at (30, 71)
             var menuItemsText = new TextLabel()
             {
-                Text = "POPULAR RECIPES\nSAVED RECIPES\nSHOPPING LIST\nSETTINGS",
+                Text = "POPULAR RECIPES\n\nSAVED RECIPES\n\nSHOPPING LIST\n\nSETTINGS",
                 TextColor = Color.White, // color: #ffffff
                 FontFamily = "Samsung One 600", // Roboto-Medium equivalent
-                PointSize = 20f / FONT_SCALE, // 20px / 1.33 = 15.04pt
+                PointSize = (20f / FONT_SCALE) - 2f, // Reduced by 2pt: was 15.04pt, now 13.04pt
                 HorizontalAlignment = HorizontalAlignment.Begin,
                 VerticalAlignment = VerticalAlignment.Top,
                 MultiLine = true,
                 LineWrapMode = LineWrapMode.Word,
                 Position = new Position(30 * scaleX, 71 * scaleY), // (58, 136)
-                Size = new Size(250 * scaleX, 200 * scaleY), // 480x384px - adequate space for 4 menu items
+                Size = new Size(250 * scaleX, 220 * scaleY), // Increased height to accommodate larger gaps: 480x422px
                 PositionUsesPivotPoint = false
             };
 
@@ -234,12 +235,12 @@ namespace RecipeApp
                 float scaleY = TARGET_HEIGHT / ORIGINAL_HEIGHT;
                 
                 // Determine which menu item was touched based on Y position
-                // CSS positions: menu text starts at 71px with 20px font, line spacing
+                // Updated for increased spacing between menu items (double line breaks)
                 float touchY = e.Touch.GetLocalPosition(0).Y;
                 string selectedItem = "";
                 
                 float menuStartY = 71 * scaleY; // 136px
-                float lineHeight = 25 * scaleY; // Approximate line height with spacing
+                float lineHeight = 35 * scaleY; // Increased line height due to larger gaps (was 25, now 35)
                 
                 if (touchY >= menuStartY && touchY < menuStartY + lineHeight)
                     selectedItem = "Popular Recipes";

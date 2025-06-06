@@ -140,11 +140,11 @@
     </Reference>
     <Reference URI="bin%2FRecipeApp.pdb">
       <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512" />
-      <DigestValue>M5XvYCjMQLZy/RJu613vk209eE4qs2jgGxs/5t5n7oWp13YcyRCceUty3kBpSt70lHi/0lw1eg3P6mDToxsDCQ==</DigestValue>
+      <DigestValue>yQxgvpWNoyVUjFp+RDPfBh/bNe13kCUCq6q6ljSC+OtbjG6nkyMgA1ybhcg3D7R9ObFmDMxv8faWh5ovXQ3kig==</DigestValue>
     </Reference>
     <Reference URI="bin%2FRecipeApp.dll">
       <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512" />
-      <DigestValue>ZXrYQKACbevF+aIalNA9wwmb2fQDMGRs0Y4gzS6Aw81ukQ3nyzlau+ocgvvSqPUM4RC7bG8UjNRq20EAlEtJPw==</DigestValue>
+      <DigestValue>SfQuqer8q4hZdZ9rOq6HIhciSlv0gAlaKFFBWXa2yIaFvUCBsmi5xDweTeO+/+ZjX0pfFOOW7KJS4lSRe97IUA==</DigestValue>
     </Reference>
     <Reference URI="#prop">
       <Transforms>
@@ -155,9 +155,9 @@
     </Reference>
   </SignedInfo>
   <SignatureValue>
-NiSiydRPkkiNBAOrufAJ+mPVimHU7YoCCUKDrD+cKSdWCg/jl4TU5EnuYvlUp1T3wi5q/u+/w1ue
-HReY0I6e//I3nlaZvo6OWU6U9b5SzFAuJf90UHIAZi/sP4vW5B+SabUuVf3xpRso65l4fs/0i7Xn
-fgPLlxaYvVNRf9prlC0=
+hdid3GOplbcMUEBAuQ6IPsLTQ7+zFsRjFVX6TqU6VCXKeSHn9DprqOwGk+TF0QwI/P48CVv3i3E9
+QCXD49/C/CSGPoqjA65066wiJUGAh8hT4iFcGtDs49PSpOq7raJJ9von2BzGcmvhMIDmtjALRG47
+n7zSBCjf8XR+Zb15BZM=
 </SignatureValue>
   <KeyInfo>
     <X509Data>
