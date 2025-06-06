@@ -24,6 +24,10 @@ namespace RecipeApp
         // Font scaling factor (1 point = 1.33px)
         private const float FONT_SCALE = 1.33f;
 
+        // UI Layout constants
+        private const float MENU_ITEM_LINE_HEIGHT = 35f;
+        private const int TOAST_DISPLAY_DURATION = 2000; // milliseconds
+
         public MenuPage()
         {
             Initialize();
@@ -151,7 +155,7 @@ namespace RecipeApp
                 MultiLine = true,
                 LineWrapMode = LineWrapMode.Word,
                 Position = new Position(30 * scaleX, 71 * scaleY), // (58, 136)
-                Size = new Size(250 * scaleX, 220 * scaleY), // Increased height to accommodate larger gaps: 480x422px
+                Size = new Size(250 * scaleX, 300 * scaleY), // 480x576px for menu items with increased spacing
                 PositionUsesPivotPoint = false
             };
 
@@ -183,11 +187,11 @@ namespace RecipeApp
                 Text = "HARRY TRUMAN",
                 TextColor = Color.White, // color: #ffffff
                 FontFamily = "Samsung One 600", // Roboto-Medium equivalent
-                PointSize = 20f / FONT_SCALE, // 20px / 1.33 = 15.04pt
+                PointSize = 20f / FONT_SCALE - 2f, // 20px / 1.33 = 15.04pt, reduced by 2pt
                 HorizontalAlignment = HorizontalAlignment.Begin,
                 VerticalAlignment = VerticalAlignment.Center,
                 Position = new Position(30 * scaleX, 616 * scaleY), // (58, 1182)
-                Size = new Size(200 * scaleX, 30 * scaleY), // 384x58px - adequate space for user name
+                Size = new Size(200 * scaleX, 50 * scaleY), // 384x96px - adequate space for user name
                 PositionUsesPivotPoint = false
             };
 
@@ -240,7 +244,7 @@ namespace RecipeApp
                 string selectedItem = "";
                 
                 float menuStartY = 71 * scaleY; // 136px
-                float lineHeight = 35 * scaleY; // Increased line height due to larger gaps (was 25, now 35)
+                float lineHeight = MENU_ITEM_LINE_HEIGHT * scaleY; // Increased line height due to larger gaps
                 
                 if (touchY >= menuStartY && touchY < menuStartY + lineHeight)
                     selectedItem = "Popular Recipes";
@@ -306,7 +310,7 @@ namespace RecipeApp
             fadeInAnimation.Play();
 
             // Auto-hide toast after 2 seconds
-            var timer = new Timer(2000);
+            var timer = new Timer(TOAST_DISPLAY_DURATION);
             timer.Tick += (sender, e) =>
             {
                 var fadeOutAnimation = new Animation(300);
