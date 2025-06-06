@@ -62,6 +62,39 @@ namespace RecipeApp
             Position = new Position(0, 0);
             PositionUsesPivotPoint = false;
 
+            // Make this view focusable to capture all input events
+            Focusable = true;
+            
+            // Block ALL types of events from propagating to lower layers
+            TouchEvent += (sender, e) =>
+            {
+                // Consume all touch events to prevent propagation to underlying page
+                return true;
+            };
+            
+            KeyEvent += (sender, e) =>
+            {
+                // Consume all key events to prevent propagation to underlying page
+                // Only allow back key to close menu
+                if (e.Key.State == Key.StateType.Up && e.Key.KeyPressedName == "Back")
+                {
+                    CloseMenu();
+                }
+                return true;
+            };
+            
+            HoverEvent += (sender, e) =>
+            {
+                // Consume all hover events to prevent propagation to underlying page
+                return true;
+            };
+            
+            WheelEvent += (sender, e) =>
+            {
+                // Consume all wheel/scroll events to prevent propagation to underlying page
+                return true;
+            };
+
             // Calculate scale factors from original 375x667 to 720x1280
             float scaleX = TARGET_WIDTH / ORIGINAL_WIDTH;  // 1.92
             float scaleY = TARGET_HEIGHT / ORIGINAL_HEIGHT; // 1.919
@@ -74,6 +107,12 @@ namespace RecipeApp
                 Position = new Position(-1 * scaleX, 0), // Scaled from left: -1px
                 PositionUsesPivotPoint = false
             };
+
+            // Add comprehensive event blocking to red rectangle
+            redRectangle.TouchEvent += (sender, e) => { return true; };
+            redRectangle.KeyEvent += (sender, e) => { return true; };
+            redRectangle.HoverEvent += (sender, e) => { return true; };
+            redRectangle.WheelEvent += (sender, e) => { return true; };
 
             // Create menu button - scaled from CSS: 24x18px at (340, 10)
             var menuButton = new ImageView()
@@ -91,8 +130,13 @@ namespace RecipeApp
                 {
                     CloseMenu();
                 }
-                return true;
+                return true; // Consume the event
             };
+            
+            // Block other events on menu button
+            menuButton.KeyEvent += (sender, e) => { return true; };
+            menuButton.HoverEvent += (sender, e) => { return true; };
+            menuButton.WheelEvent += (sender, e) => { return true; };
 
             // Create menu items text - scaled from CSS: 20px font at (30, 71)
             var menuItemsText = new TextLabel()
@@ -106,13 +150,15 @@ namespace RecipeApp
                 MultiLine = true,
                 LineWrapMode = LineWrapMode.Word,
                 Position = new Position(30 * scaleX, 71 * scaleY), // (58, 136)
-                PositionUsesPivotPoint = false,
-                WidthSpecification = LayoutParamPolicies.WrapContent,
-                HeightSpecification = LayoutParamPolicies.WrapContent
+                Size = new Size(250 * scaleX, 200 * scaleY), // 480x384px - adequate space for 4 menu items
+                PositionUsesPivotPoint = false
             };
 
-            // Add touch events for menu items
+            // Add comprehensive event blocking for menu items
             menuItemsText.TouchEvent += OnMenuItemTouch;
+            menuItemsText.KeyEvent += (sender, e) => { return true; };
+            menuItemsText.HoverEvent += (sender, e) => { return true; };
+            menuItemsText.WheelEvent += (sender, e) => { return true; };
 
             // Create profile image - scaled from CSS: 46x46px at (29, 552)
             var profileImage = new ImageView()
@@ -124,6 +170,12 @@ namespace RecipeApp
                 CornerRadius = (46 * scaleX) / 2 // Make it circular
             };
 
+            // Block all events on profile image
+            profileImage.TouchEvent += (sender, e) => { return true; };
+            profileImage.KeyEvent += (sender, e) => { return true; };
+            profileImage.HoverEvent += (sender, e) => { return true; };
+            profileImage.WheelEvent += (sender, e) => { return true; };
+
             // Create user name text - scaled from CSS: 20px font at (30, 616)
             var userNameText = new TextLabel()
             {
@@ -134,10 +186,15 @@ namespace RecipeApp
                 HorizontalAlignment = HorizontalAlignment.Begin,
                 VerticalAlignment = VerticalAlignment.Center,
                 Position = new Position(30 * scaleX, 616 * scaleY), // (58, 1182)
-                PositionUsesPivotPoint = false,
-                WidthSpecification = LayoutParamPolicies.WrapContent,
-                HeightSpecification = LayoutParamPolicies.WrapContent
+                Size = new Size(200 * scaleX, 30 * scaleY), // 384x58px - adequate space for user name
+                PositionUsesPivotPoint = false
             };
+
+            // Block all events on user name
+            userNameText.TouchEvent += (sender, e) => { return true; };
+            userNameText.KeyEvent += (sender, e) => { return true; };
+            userNameText.HoverEvent += (sender, e) => { return true; };
+            userNameText.WheelEvent += (sender, e) => { return true; };
 
             // Create selection line - scaled from CSS: 30px width, 5px border at (16, 68), rotated 90deg
             var selectionLine = new View()
@@ -147,6 +204,12 @@ namespace RecipeApp
                 Position = new Position(16 * scaleX, 68 * scaleY), // (31, 130)
                 PositionUsesPivotPoint = false
             };
+
+            // Block all events on selection line
+            selectionLine.TouchEvent += (sender, e) => { return true; };
+            selectionLine.KeyEvent += (sender, e) => { return true; };
+            selectionLine.HoverEvent += (sender, e) => { return true; };
+            selectionLine.WheelEvent += (sender, e) => { return true; };
 
             // Add all components to the menu page in correct order
             Add(redRectangle);
@@ -192,6 +255,8 @@ namespace RecipeApp
                     ShowToast($"{selectedItem} selected");
                 }
             }
+            
+            // Always consume the touch event to prevent propagation to underlying page
             return true;
         }
 
