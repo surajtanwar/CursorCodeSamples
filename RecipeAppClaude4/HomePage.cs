@@ -177,7 +177,7 @@ namespace RecipeApp
             {
                 if (e.Touch.GetState(0) == PointStateType.Up)
                 {
-                    ShowToast("Menu clicked!");
+                    ShowMenuPage();
                 }
                 return true;
             };
@@ -742,6 +742,16 @@ namespace RecipeApp
                 return false;
             };
             timer.Start();
+        }
+
+        private void ShowMenuPage()
+        {
+            // Get main window to add menu page
+            var mainWindow = NUIApplication.GetDefaultWindow();
+            
+            // Create and show menu page
+            var menuPage = new MenuPage();
+            mainWindow.Add(menuPage);
         }
 
         private bool OnCarouselTouch(object sender, View.TouchEventArgs e)
