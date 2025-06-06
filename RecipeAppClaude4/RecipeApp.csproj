@@ -4,6 +4,15 @@
     <OutputType>Exe</OutputType>
     <TargetFrameworks>tizen10.0;tizen7.0</TargetFrameworks>
   </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(TargetFramework)' == 'tizen7.0'">
+    <DefineConstants>TIZEN_7_0</DefineConstants>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(TargetFramework)' == 'tizen10.0'">
+    <DefineConstants>TIZEN_10_0</DefineConstants>
+  </PropertyGroup>
+  
   <ItemGroup>
     <Content Include="res\images\splash\Rectangle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

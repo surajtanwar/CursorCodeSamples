@@ -95,8 +95,12 @@ namespace RecipeApp
             toast.Layout = new LinearLayout()
             {
                 LinearOrientation = LinearLayout.Orientation.Vertical,
+#if TIZEN_7_0
+                LinearAlignment = LinearLayout.Alignment.Center
+#else
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center
+#endif
             };
         }
 

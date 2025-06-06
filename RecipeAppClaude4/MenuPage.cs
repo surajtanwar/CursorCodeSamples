@@ -64,21 +64,21 @@ namespace RecipeApp
             HeightSpecification = LayoutParamPolicies.MatchParent;
             BackgroundColor = Color.White; // Background: #ffffff from CSS
 
-            // Create red sidebar rectangle - scaled from 320x667 to cover full height
+            // Create red sidebar rectangle - make it wider to cover most of the screen like in the image
             var redSidebar = new View()
             {
-                BackgroundColor = new Color(0.92f, 0.34f, 0.34f, 1.0f), // #eb5757
-                Size = new Size(320 * scaleX, TARGET_HEIGHT), // Scaled width, full height
-                Position = new Position(-1 * scaleX, 0), // Scaled from left: -1px
+                BackgroundColor = new Color(0.92f, 0.34f, 0.34f, 1.0f), // #eb5757 - matches the uploaded image color
+                Size = new Size(TARGET_WIDTH * 0.85f, TARGET_HEIGHT), // Cover 85% of screen width
+                Position = new Position(0, 0), // Start from left edge
                 PositionUsesPivotPoint = false
             };
 
-            // Create menu button - scaled from original position
+            // Create menu button - positioned in the top right of the red area
             var menuButton = new ImageView()
             {
                 ResourceUrl = GetResourcePath("btn-menu0.svg"),
                 Size = new Size(24 * scaleX, 18 * scaleY), // Scaled from 24x18
-                Position = new Position(340 * scaleX, 10 * scaleY), // Scaled from left: 340px, top: 10px
+                Position = new Position(TARGET_WIDTH * 0.85f - 50, 30), // Top right of red sidebar
                 PositionUsesPivotPoint = false
             };
 
@@ -96,23 +96,23 @@ namespace RecipeApp
             var decorativeLine = new View()
             {
                 BackgroundColor = Color.White, // border-color: #ffffff
-                Size = new Size(5 * scaleX, 30 * scaleY), // Vertical line: 5px width, 30px height
-                Position = new Position(16 * scaleX, 71 * scaleY), // Aligned with POPULAR RECIPES text
+                Size = new Size(4, 25), // Simple fixed size line
+                Position = new Position(30, 95), // Align with the POPULAR RECIPES text
                 PositionUsesPivotPoint = false
             };
 
-            // Create menu items text - improved spacing and formatting
+            // Create menu items text - improved spacing and positioning to match the image
             var menuItemsText = new TextLabel()
             {
                 Text = "POPULAR RECIPES\n\nSAVED RECIPES\n\nSHOPPING LIST\n\nSETTINGS",
                 TextColor = Color.White, // color: #ffffff
                 FontFamily = "Samsung One 600", // Roboto-Medium equivalent
-                PointSize = 20f / FONT_SCALE, // Convert 20px to points: 20/1.33 = ~15.04pt
+                PointSize = 20f, // Slightly larger font for better readability
                 HorizontalAlignment = HorizontalAlignment.Begin,
                 VerticalAlignment = VerticalAlignment.Top,
                 MultiLine = true,
                 LineWrapMode = LineWrapMode.Word,
-                Position = new Position(30 * scaleX, 71 * scaleY), // Scaled from left: 30px, top: 71px
+                Position = new Position(50, 90), // Slightly higher positioning
                 PositionUsesPivotPoint = false,
                 WidthSpecification = LayoutParamPolicies.WrapContent,
                 HeightSpecification = LayoutParamPolicies.WrapContent
@@ -121,26 +121,26 @@ namespace RecipeApp
             // Add touch events for menu items
             menuItemsText.TouchEvent += OnMenuItemTouch;
 
-            // Create profile image - adjusted for scaled resolution
+            // Create profile image - positioned at bottom as shown in the image
             var profileImage = new ImageView()
             {
                 ResourceUrl = GetResourcePath("ellipse0.png"),
-                Size = new Size(46 * scaleX, 46 * scaleY), // Scaled from 46x46
-                Position = new Position(29 * scaleX, (TARGET_HEIGHT - 150) * scaleY), // Positioned near bottom for scaled height
+                Size = new Size(50, 50), // Fixed size for profile image
+                Position = new Position(30, TARGET_HEIGHT - 120), // Bottom left area
                 PositionUsesPivotPoint = false,
-                CornerRadius = (46 * scaleX) / 2 // Make it circular
+                CornerRadius = 25 // Make it circular
             };
 
-            // Create user name text - adjusted for scaled resolution
+            // Create user name text - positioned below profile image
             var userNameText = new TextLabel()
             {
                 Text = "HARRY TRUMAN",
                 TextColor = Color.White, // color: #ffffff
                 FontFamily = "Samsung One 600", // Roboto-Medium equivalent
-                PointSize = 20f / FONT_SCALE, // Convert 20px to points: 20/1.33 = ~15.04pt
+                PointSize = 16f, // Appropriate size for name
                 HorizontalAlignment = HorizontalAlignment.Begin,
                 VerticalAlignment = VerticalAlignment.Center,
-                Position = new Position(30 * scaleX, (TARGET_HEIGHT - 100) * scaleY), // Positioned below profile image for scaled height
+                Position = new Position(30, TARGET_HEIGHT - 60), // Below profile image
                 PositionUsesPivotPoint = false,
                 WidthSpecification = LayoutParamPolicies.WrapContent,
                 HeightSpecification = LayoutParamPolicies.WrapContent
@@ -154,7 +154,7 @@ namespace RecipeApp
             Add(userNameText);
             Add(menuButton);
 
-            // Set up slide-in animation
+            // Set up slide-in animation from the left
             Position = new Position(-TARGET_WIDTH, 0);
             var slideInAnimation = new Animation(300); // 0.3 second slide-in
             slideInAnimation.AnimateTo(this, "Position", new Position(0, 0));
@@ -165,17 +165,18 @@ namespace RecipeApp
         {
             if (e.Touch.GetState(0) == PointStateType.Up)
             {
-                // Determine which menu item was touched based on Y position with improved spacing
+                // Determine which menu item was touched based on Y position - updated for new layout
                 float touchY = e.Touch.GetLocalPosition(0).Y;
                 string selectedItem = "";
                 
-                if (touchY < 50 * scaleY)
+                // Account for new positioning starting at Y=90 with proper line spacing
+                if (touchY >= 90 && touchY < 130)
                     selectedItem = "Popular Recipes";
-                else if (touchY < 110 * scaleY)
+                else if (touchY >= 150 && touchY < 190)
                     selectedItem = "Saved Recipes";
-                else if (touchY < 170 * scaleY)
+                else if (touchY >= 210 && touchY < 250)
                     selectedItem = "Shopping List";
-                else if (touchY < 230 * scaleY)
+                else if (touchY >= 270 && touchY < 310)
                     selectedItem = "Settings";
 
                 if (!string.IsNullOrEmpty(selectedItem))
@@ -201,8 +202,12 @@ namespace RecipeApp
                 Layout = new LinearLayout()
                 {
                     LinearOrientation = LinearLayout.Orientation.Vertical,
+#if TIZEN_7_0
+                    LinearAlignment = LinearLayout.Alignment.Center
+#else
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Center
+#endif
                 }
             };
 
@@ -246,7 +251,7 @@ namespace RecipeApp
 
         private void CloseMenu()
         {
-            // Slide out animation
+            // Slide out animation to the left
             var slideOutAnimation = new Animation(300);
             slideOutAnimation.AnimateTo(this, "Position", new Position(-TARGET_WIDTH, 0));
             slideOutAnimation.Finished += (s, args) =>
