@@ -17,14 +17,6 @@ namespace RecipeApp
         private const float TARGET_WIDTH = 720f;
         private const float TARGET_HEIGHT = 1280f;
         
-        // Original design dimensions for scaling calculations
-        private const float ORIGINAL_WIDTH = 375f;
-        private const float ORIGINAL_HEIGHT = 667f;
-        
-        // Scale factors
-        private readonly float scaleX = TARGET_WIDTH / ORIGINAL_WIDTH;   // ~1.92
-        private readonly float scaleY = TARGET_HEIGHT / ORIGINAL_HEIGHT; // ~1.92
-        
         // Font scaling factor (1 point = 1.33px)
         private const float FONT_SCALE = 1.33f;
 
@@ -59,26 +51,19 @@ namespace RecipeApp
 
         private void Initialize()
         {
-            // Set up the main menu container for 720x1280 resolution
+            // Set up the main menu container as a full-screen overlay
             WidthSpecification = LayoutParamPolicies.MatchParent;
             HeightSpecification = LayoutParamPolicies.MatchParent;
-            BackgroundColor = Color.White; // Background: #ffffff from CSS
+            BackgroundColor = new Color(0.92f, 0.34f, 0.34f, 1.0f); // Full red background like menu.png
+            Position = new Position(0, 0);
+            PositionUsesPivotPoint = false;
 
-            // Create red sidebar rectangle - make it wider to cover most of the screen like in the image
-            var redSidebar = new View()
-            {
-                BackgroundColor = new Color(0.92f, 0.34f, 0.34f, 1.0f), // #eb5757 - matches the uploaded image color
-                Size = new Size(TARGET_WIDTH * 0.85f, TARGET_HEIGHT), // Cover 85% of screen width
-                Position = new Position(0, 0), // Start from left edge
-                PositionUsesPivotPoint = false
-            };
-
-            // Create menu button - positioned in the top right of the red area
+            // Create menu button (close button) - positioned in the top right corner
             var menuButton = new ImageView()
             {
                 ResourceUrl = GetResourcePath("btn-menu0.svg"),
-                Size = new Size(24 * scaleX, 18 * scaleY), // Scaled from 24x18
-                Position = new Position(TARGET_WIDTH * 0.85f - 50, 30), // Top right of red sidebar
+                Size = new Size(32, 24), // Slightly larger for better visibility
+                Position = new Position(TARGET_WIDTH - 60, 40), // Top right corner
                 PositionUsesPivotPoint = false
             };
 
@@ -92,99 +77,151 @@ namespace RecipeApp
                 return true;
             };
 
-            // Create decorative line - positioned as selection indicator for POPULAR RECIPES
+            // Create white selection indicator line for POPULAR RECIPES
             var decorativeLine = new View()
             {
-                BackgroundColor = Color.White, // border-color: #ffffff
-                Size = new Size(4, 25), // Simple fixed size line
-                Position = new Position(30, 95), // Align with the POPULAR RECIPES text
+                BackgroundColor = Color.White,
+                Size = new Size(6, 30), // Slightly thicker line
+                Position = new Position(40, 120), // Left side margin
                 PositionUsesPivotPoint = false
             };
 
-            // Create menu items text - improved spacing and positioning to match the image
-            var menuItemsText = new TextLabel()
+            // Create individual menu item labels for better control and visibility
+            var popularRecipesLabel = new TextLabel()
             {
-                Text = "POPULAR RECIPES\n\nSAVED RECIPES\n\nSHOPPING LIST\n\nSETTINGS",
-                TextColor = Color.White, // color: #ffffff
-                FontFamily = "Samsung One 600", // Roboto-Medium equivalent
-                PointSize = 20f, // Slightly larger font for better readability
+                Text = "POPULAR RECIPES",
+                TextColor = Color.White,
+                FontFamily = "Samsung One 600",
+                PointSize = 22f, // Large, clear text
                 HorizontalAlignment = HorizontalAlignment.Begin,
-                VerticalAlignment = VerticalAlignment.Top,
-                MultiLine = true,
-                LineWrapMode = LineWrapMode.Word,
-                Position = new Position(50, 90), // Slightly higher positioning
+                VerticalAlignment = VerticalAlignment.Center,
+                Position = new Position(60, 115),
                 PositionUsesPivotPoint = false,
                 WidthSpecification = LayoutParamPolicies.WrapContent,
                 HeightSpecification = LayoutParamPolicies.WrapContent
             };
 
-            // Add touch events for menu items
-            menuItemsText.TouchEvent += OnMenuItemTouch;
+            var savedRecipesLabel = new TextLabel()
+            {
+                Text = "SAVED RECIPES",
+                TextColor = Color.White,
+                FontFamily = "Samsung One 400",
+                PointSize = 22f,
+                HorizontalAlignment = HorizontalAlignment.Begin,
+                VerticalAlignment = VerticalAlignment.Center,
+                Position = new Position(60, 180),
+                PositionUsesPivotPoint = false,
+                WidthSpecification = LayoutParamPolicies.WrapContent,
+                HeightSpecification = LayoutParamPolicies.WrapContent
+            };
 
-            // Create profile image - positioned at bottom as shown in the image
+            var shoppingListLabel = new TextLabel()
+            {
+                Text = "SHOPPING LIST",
+                TextColor = Color.White,
+                FontFamily = "Samsung One 400",
+                PointSize = 22f,
+                HorizontalAlignment = HorizontalAlignment.Begin,
+                VerticalAlignment = VerticalAlignment.Center,
+                Position = new Position(60, 245),
+                PositionUsesPivotPoint = false,
+                WidthSpecification = LayoutParamPolicies.WrapContent,
+                HeightSpecification = LayoutParamPolicies.WrapContent
+            };
+
+            var settingsLabel = new TextLabel()
+            {
+                Text = "SETTINGS",
+                TextColor = Color.White,
+                FontFamily = "Samsung One 400",
+                PointSize = 22f,
+                HorizontalAlignment = HorizontalAlignment.Begin,
+                VerticalAlignment = VerticalAlignment.Center,
+                Position = new Position(60, 310),
+                PositionUsesPivotPoint = false,
+                WidthSpecification = LayoutParamPolicies.WrapContent,
+                HeightSpecification = LayoutParamPolicies.WrapContent
+            };
+
+            // Add touch events to individual labels
+            popularRecipesLabel.TouchEvent += (sender, e) =>
+            {
+                if (e.Touch.GetState(0) == PointStateType.Up)
+                {
+                    ShowToast("Popular Recipes selected");
+                }
+                return true;
+            };
+
+            savedRecipesLabel.TouchEvent += (sender, e) =>
+            {
+                if (e.Touch.GetState(0) == PointStateType.Up)
+                {
+                    ShowToast("Saved Recipes selected");
+                }
+                return true;
+            };
+
+            shoppingListLabel.TouchEvent += (sender, e) =>
+            {
+                if (e.Touch.GetState(0) == PointStateType.Up)
+                {
+                    ShowToast("Shopping List selected");
+                }
+                return true;
+            };
+
+            settingsLabel.TouchEvent += (sender, e) =>
+            {
+                if (e.Touch.GetState(0) == PointStateType.Up)
+                {
+                    ShowToast("Settings selected");
+                }
+                return true;
+            };
+
+            // Create profile image at the bottom
             var profileImage = new ImageView()
             {
                 ResourceUrl = GetResourcePath("ellipse0.png"),
-                Size = new Size(50, 50), // Fixed size for profile image
-                Position = new Position(30, TARGET_HEIGHT - 120), // Bottom left area
+                Size = new Size(60, 60),
+                Position = new Position(40, TARGET_HEIGHT - 140),
                 PositionUsesPivotPoint = false,
-                CornerRadius = 25 // Make it circular
+                CornerRadius = 30
             };
 
-            // Create user name text - positioned below profile image
-            var userNameText = new TextLabel()
+            // Create user name below profile
+            var userNameLabel = new TextLabel()
             {
                 Text = "HARRY TRUMAN",
-                TextColor = Color.White, // color: #ffffff
-                FontFamily = "Samsung One 600", // Roboto-Medium equivalent
-                PointSize = 16f, // Appropriate size for name
+                TextColor = Color.White,
+                FontFamily = "Samsung One 600",
+                PointSize = 18f,
                 HorizontalAlignment = HorizontalAlignment.Begin,
                 VerticalAlignment = VerticalAlignment.Center,
-                Position = new Position(30, TARGET_HEIGHT - 60), // Below profile image
+                Position = new Position(40, TARGET_HEIGHT - 70),
                 PositionUsesPivotPoint = false,
                 WidthSpecification = LayoutParamPolicies.WrapContent,
                 HeightSpecification = LayoutParamPolicies.WrapContent
             };
 
             // Add all components to the menu page
-            Add(redSidebar);
             Add(decorativeLine);
-            Add(menuItemsText);
+            Add(popularRecipesLabel);
+            Add(savedRecipesLabel);
+            Add(shoppingListLabel);
+            Add(settingsLabel);
             Add(profileImage);
-            Add(userNameText);
+            Add(userNameLabel);
             Add(menuButton);
 
-            // Set up slide-in animation from the left
+            // Start with the menu off-screen (slide-in effect)
             Position = new Position(-TARGET_WIDTH, 0);
-            var slideInAnimation = new Animation(300); // 0.3 second slide-in
+            
+            // Slide in animation
+            var slideInAnimation = new Animation(300);
             slideInAnimation.AnimateTo(this, "Position", new Position(0, 0));
             slideInAnimation.Play();
-        }
-
-        private bool OnMenuItemTouch(object sender, View.TouchEventArgs e)
-        {
-            if (e.Touch.GetState(0) == PointStateType.Up)
-            {
-                // Determine which menu item was touched based on Y position - updated for new layout
-                float touchY = e.Touch.GetLocalPosition(0).Y;
-                string selectedItem = "";
-                
-                // Account for new positioning starting at Y=90 with proper line spacing
-                if (touchY >= 90 && touchY < 130)
-                    selectedItem = "Popular Recipes";
-                else if (touchY >= 150 && touchY < 190)
-                    selectedItem = "Saved Recipes";
-                else if (touchY >= 210 && touchY < 250)
-                    selectedItem = "Shopping List";
-                else if (touchY >= 270 && touchY < 310)
-                    selectedItem = "Settings";
-
-                if (!string.IsNullOrEmpty(selectedItem))
-                {
-                    ShowToast($"{selectedItem} selected");
-                }
-            }
-            return true;
         }
 
         private void ShowToast(string message)
