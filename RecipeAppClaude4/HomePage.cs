@@ -163,12 +163,12 @@ namespace RecipeApp
             HeightSpecification = LayoutParamPolicies.MatchParent;
             BackgroundColor = Color.White; // Background: #ffffff from CSS
 
-            // Create menu button - scaled from (20,10) to (38,19)
+            // Create menu button - positioned to be visible and properly spaced
             var menuButton = new ImageView()
             {
                 ResourceUrl = GetResourcePath("btn-menu0.svg"),
                 Size = new Size(24 * scaleX, 18 * scaleY), // ~46 x 35
-                Position = new Position(20 * scaleX, 10 * scaleY), // ~38, 19
+                Position = new Position(20 * scaleX, 20 * scaleY), // Better positioning for visibility
                 PositionUsesPivotPoint = false
             };
 
@@ -182,12 +182,12 @@ namespace RecipeApp
                 return true;
             };
 
-            // Create search button - scaled from (right: 20.17, top: 10)
+            // Create search button - positioned to be visible and properly spaced
             var searchButton = new ImageView()
             {
                 ResourceUrl = GetResourcePath("btn-search0.svg"),
                 Size = new Size(23.83f * scaleX, 23.83f * scaleY), // ~46 x 46
-                Position = new Position(TARGET_WIDTH - (20.17f * scaleX) - (23.83f * scaleX), 10 * scaleY), // Right aligned
+                Position = new Position(TARGET_WIDTH - (20.17f * scaleX) - (23.83f * scaleX), 20 * scaleY), // Better positioning for visibility
                 PositionUsesPivotPoint = false
             };
 
@@ -201,18 +201,18 @@ namespace RecipeApp
                 return true;
             };
 
-            // Create "POPULAR RECIPES" header - positioned to be clearly visible below system UI
+            // Create "POPULAR RECIPES" header - positioned horizontally with menu and search buttons
             var popularRecipesLabel = new TextLabel()
             {
                 Text = "POPULAR RECIPES",
                 TextColor = new Color(0.92f, 0.34f, 0.34f, 1.0f), // #eb5757
                 FontFamily = "Samsung One 700", // Roboto-Bold equivalent
-                PointSize = 14f / FONT_SCALE, // Reduced by 2 points (was 20f, now 18f)
+                PointSize = 16f / FONT_SCALE, // Increased font size for better visibility
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
                 WidthSpecification = LayoutParamPolicies.MatchParent,
                 HeightSpecification = LayoutParamPolicies.WrapContent,
-                Position = new Position(0, 120 * scaleY), // Moved much further down to ensure visibility
+                Position = new Position(0, 20 * scaleY), // Aligned with menu and search buttons
                 PositionUsesPivotPoint = false
             };
 
@@ -221,7 +221,7 @@ namespace RecipeApp
             {
                 WidthSpecification = LayoutParamPolicies.MatchParent,
                 HeightSpecification = LayoutParamPolicies.WrapContent,
-                Position = new Position(0, 130 * scaleY), // Adjusted for moved header
+                Position = new Position(0, 70 * scaleY), // Positioned below the header row
                 PositionUsesPivotPoint = false
             };
 
@@ -330,7 +330,7 @@ namespace RecipeApp
             var recipeContainer = new View()
             {
                 Size = new Size(TARGET_WIDTH, 500 * scaleY),
-                Position = new Position(0, 230 * scaleY), // Adjusted for moved header and tabs
+                Position = new Position(0, 130 * scaleY), // Adjusted for header now aligned with top buttons
                 PositionUsesPivotPoint = false
             };
 
@@ -357,23 +357,23 @@ namespace RecipeApp
             carouselImageView.TouchEvent += OnCarouselTouch;
             carouselContainer.Add(carouselImageView);
 
-            // Create side mask group images for enhanced visual depth - positioned to create preview effect like in design
+            // Create side mask group images for enhanced visual depth - positioned to NOT overlap with main carousel
             leftMaskGroup = new ImageView()
             {
                 ResourceUrl = GetResourcePath(GetLeftMaskImage()),
-                Size = new Size(80 * scaleX, 180 * scaleY), // Larger size for better preview
-                Position = new Position(30 * scaleX, 10 * scaleY), // Much closer to main carousel, slight overlap
+                Size = new Size(60 * scaleX, 160 * scaleY), // Slightly smaller for better fit
+                Position = new Position(5 * scaleX, 20 * scaleY), // Far left side, no overlap with carousel
                 PositionUsesPivotPoint = false,
-                Opacity = 0.8f // Slightly more visible for preview effect
+                Opacity = 0.6f // More transparent to show it's a preview
             };
 
             rightMaskGroup = new ImageView()
             {
                 ResourceUrl = GetResourcePath(GetRightMaskImage()),
-                Size = new Size(80 * scaleX, 180 * scaleY), // Larger size for better preview  
-                Position = new Position(240 * scaleX, 10 * scaleY), // Much closer to main carousel, slight overlap
+                Size = new Size(60 * scaleX, 160 * scaleY), // Slightly smaller for better fit
+                Position = new Position(320 * scaleX, 20 * scaleY), // Far right side, no overlap with carousel
                 PositionUsesPivotPoint = false,
-                Opacity = 0.8f // Slightly more visible for preview effect
+                Opacity = 0.6f // More transparent to show it's a preview
             };
 
             // Navigation dots hidden as requested
