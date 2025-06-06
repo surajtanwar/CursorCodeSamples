@@ -10,3 +10,6 @@ C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\bin\Release\tizen10.0\RecipeApp.pd
 C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\obj\Release\tizen10.0\XamlC.stamp
 C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\obj\Release\tizen10.0\RecipeApp.dll
 C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\obj\Release\tizen10.0\RecipeApp.pdb
+C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\bin\Release\tizen10.0\res\images\splash\Rectangle.png
+C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\bin\Release\tizen10.0\res\images\splash\Group.png
+C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\bin\Release\tizen10.0\res\images\splash\Group_2.png

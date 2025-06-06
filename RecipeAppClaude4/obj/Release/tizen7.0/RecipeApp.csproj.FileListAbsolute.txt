@@ -9,3 +9,6 @@ C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\bin\Release\tizen7.0\RecipeApp.dll
 C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\bin\Release\tizen7.0\RecipeApp.pdb
 C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\obj\Release\tizen7.0\RecipeApp.dll
 C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\obj\Release\tizen7.0\RecipeApp.pdb
+C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\bin\Release\tizen7.0\res\images\splash\Rectangle.png
+C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\bin\Release\tizen7.0\res\images\splash\Group.png
+C:\GitRepo\CursorCodeSamples\RecipeAppClaude4\bin\Release\tizen7.0\res\images\splash\Group_2.png

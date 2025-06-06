@@ -201,7 +201,8 @@ namespace RecipeApp
                 Layout = new LinearLayout()
                 {
                     LinearOrientation = LinearLayout.Orientation.Vertical,
-                    LinearAlignment = LinearLayout.Alignment.Center
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center
                 }
             };
 
@@ -251,7 +252,8 @@ namespace RecipeApp
             slideOutAnimation.Finished += (s, args) =>
             {
                 // Remove from parent and dispose
-                Parent?.Remove(this);
+                var parent = GetParent() as View;
+                parent?.Remove(this);
                 Dispose();
             };
             slideOutAnimation.Play();

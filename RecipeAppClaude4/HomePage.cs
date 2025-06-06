@@ -702,7 +702,8 @@ namespace RecipeApp
                 Layout = new LinearLayout()
                 {
                     LinearOrientation = LinearLayout.Orientation.Vertical,
-                    LinearAlignment = LinearLayout.Alignment.Center
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center
                 }
             };
 
