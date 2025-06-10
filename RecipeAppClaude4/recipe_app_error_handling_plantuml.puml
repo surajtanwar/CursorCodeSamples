@@ -1,0 +1,44 @@
+@startuml Recipe Application Error Handling
+
+title Recipe Application - Error Handling Flow
+
+participant "User" as User
+participant "HomePage" as Home
+participant "RecipeController" as RC
+participant "System" as System
+
+note over User, System : Error Handling Scenarios
+
+User -> Home : Invalid action
+Home -> RC : Request invalid operation
+RC -> RC : Validate request
+
+alt Invalid Category
+    RC --> Home : Return null/empty
+    Home -> Home : ShowToast("No recipes available")
+    Home --> User : Display error message
+else Invalid Recipe Index
+    RC -> RC : Reset to valid index
+    RC --> Home : Return first valid recipe
+    Home -> Home : Update display with valid recipe
+    Home --> User : Show corrected content
+else Resource Loading Error
+    Home -> System : Check resource path
+    System --> Home : File not found
+    Home -> Home : Use fallback resource
+    Home -> Home : ShowToast("Image not available")
+    Home --> User : Display with fallback image
+else Network Error (Future Enhancement)
+    Home -> System : Check connectivity
+    System --> Home : Network unavailable
+    Home -> Home : ShowToast("Network error - using cached data")
+    Home --> User : Display cached content
+else Memory/Performance Issue
+    Home -> System : Check memory usage
+    System --> Home : Low memory warning
+    Home -> Home : Cleanup unused resources
+    Home -> Home : ShowToast("Optimizing performance...")
+    Home --> User : Continue with reduced features
+end
+
+@enduml 

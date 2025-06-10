@@ -1,0 +1,203 @@
+@startuml Recipe Application Architecture Diagram
+
+!define RECTANGLE class
+
+title Recipe Application - System Architecture Diagram
+
+skinparam rectangle {
+    BackgroundColor<<Presentation>> LightGreen
+    BackgroundColor<<Business>> LightBlue
+    BackgroundColor<<Data>> LightPink
+    BackgroundColor<<Infrastructure>> LightGray
+    BackgroundColor<<Framework>> LightYellow
+    BackgroundColor<<External>> LightCyan
+}
+
+package "Tizen Platform" <<Framework>> {
+    rectangle "Tizen NUI Framework" as TizenNUI {
+        rectangle "NUIApplication" as NUIApp
+        rectangle "Window Management" as WindowMgr
+        rectangle "View System" as ViewSystem
+        rectangle "Event System" as EventSystem
+        rectangle "Animation System" as AnimationSystem
+    }
+    
+    rectangle "Tizen APIs" as TizenAPIs {
+        rectangle "Resource Management" as ResourceMgr
+        rectangle "Application Lifecycle" as AppLifecycle
+        rectangle "Hardware Integration" as Hardware
+    }
+}
+
+package "Application Architecture" {
+    
+    package "Presentation Layer" <<Presentation>> {
+        rectangle "Application Entry Point" as AppEntry {
+            rectangle "Program.cs" as Program
+        }
+        
+        rectangle "User Interface Components" as UIComponents {
+            rectangle "SplashScreen" as Splash
+            rectangle "HomePage" as Home
+            rectangle "MenuPage" as Menu
+        }
+        
+        rectangle "UI State Management" as UIState {
+            rectangle "Category State" as CategoryState
+            rectangle "Carousel State" as CarouselState
+            rectangle "Menu State" as MenuState
+        }
+    }
+    
+    package "Business Logic Layer" <<Business>> {
+        rectangle "Domain Controllers" as Controllers {
+            rectangle "RecipeController\n(Singleton)" as RecipeCtrl
+            rectangle "MenuController\n(Singleton)" as MenuCtrl
+        }
+        
+        rectangle "Business Rules" as BusinessRules {
+            rectangle "Recipe Management" as RecipeMgmt
+            rectangle "Category Logic" as CategoryLogic
+            rectangle "Search Logic" as SearchLogic
+            rectangle "Favorite Management" as FavoriteMgmt
+        }
+        
+        rectangle "Event Publishers" as EventPub {
+            rectangle "Recipe Events" as RecipeEvents
+            rectangle "Menu Events" as MenuEvents
+            rectangle "UI Events" as UIEvents
+        }
+    }
+    
+    package "Data Layer" <<Data>> {
+        rectangle "Data Models" as Models {
+            rectangle "RecipeModel" as RecipeModel
+            rectangle "MenuItemModel" as MenuModel
+            rectangle "RecipeCategory\n(Enum)" as CategoryEnum
+        }
+        
+        rectangle "Data Storage" as Storage {
+            rectangle "In-Memory Store" as InMemoryStore
+            rectangle "Static Data" as StaticData
+        }
+        
+        rectangle "Data Access" as DataAccess {
+            rectangle "Recipe Repository" as RecipeRepo
+            rectangle "Menu Repository" as MenuRepo
+        }
+    }
+    
+    package "Infrastructure Layer" <<Infrastructure>> {
+        rectangle "Cross-Cutting Concerns" as CrossCutting {
+            rectangle "Styling System" as Styles
+            rectangle "Resource Loading" as ResourceLoad
+            rectangle "Error Handling" as ErrorHandle
+            rectangle "Logging" as Logging
+        }
+        
+        rectangle "Utilities" as Utils {
+            rectangle "Image Processing" as ImageProc
+            rectangle "Animation Helpers" as AnimHelpers
+            rectangle "Layout Calculations" as LayoutCalc
+        }
+    }
+}
+
+package "External Resources" <<External>> {
+    rectangle "Static Assets" as Assets {
+        rectangle "Images" as Images
+        rectangle "Icons" as Icons
+        rectangle "Fonts" as Fonts
+    }
+    
+    rectangle "Configuration" as Config {
+        rectangle "App Manifest" as Manifest
+        rectangle "Build Configuration" as BuildConfig
+    }
+}
+
+' Framework Dependencies
+Program --> NUIApp : inherits
+Splash --> ViewSystem : inherits
+Home --> ViewSystem : inherits
+Menu --> ViewSystem : inherits
+
+Program --> AppLifecycle : uses
+UIComponents --> EventSystem : uses
+UIComponents --> AnimationSystem : uses
+
+' Architectural Layer Dependencies
+Program --> UIComponents : manages
+UIComponents --> Controllers : uses
+Controllers --> Models : manages
+Controllers --> Storage : accesses
+
+' Cross-cutting concerns
+UIComponents --> Styles : uses
+Controllers --> ErrorHandle : uses
+UIComponents --> ResourceLoad : uses
+ResourceLoad --> Assets : accesses
+
+' Data Flow
+Controllers --> EventPub : publishes
+EventPub --> UIComponents : notifies
+Controllers --> DataAccess : uses
+DataAccess --> Storage : accesses
+
+' Business Logic Flow
+RecipeCtrl --> RecipeMgmt : implements
+RecipeCtrl --> CategoryLogic : implements
+RecipeCtrl --> SearchLogic : implements
+RecipeCtrl --> FavoriteMgmt : implements
+
+MenuCtrl --> BusinessRules : implements
+
+' Event Flow
+RecipeCtrl --> RecipeEvents : publishes
+MenuCtrl --> MenuEvents : publishes
+UIComponents --> UIEvents : publishes
+
+' State Management
+Home --> CategoryState : manages
+Home --> CarouselState : manages
+Menu --> MenuState : manages
+
+' Resource Dependencies
+ResourceLoad --> ResourceMgr : uses
+UIComponents --> Images : loads
+UIComponents --> Icons : loads
+UIComponents --> Fonts : uses
+
+' Configuration
+Program --> Manifest : reads
+Program --> BuildConfig : uses
+
+note top of Controllers
+    **Singleton Pattern**
+    Single instances manage
+    application state and
+    business logic
+end note
+
+note right of EventPub
+    **Observer Pattern**
+    Loose coupling between
+    UI and business logic
+    through events
+end note
+
+note bottom of Storage
+    **Repository Pattern**
+    Abstraction over data
+    access and storage
+    mechanisms
+end note
+
+note left of UIComponents
+    **MVC Pattern**
+    Clear separation of
+    UI concerns from
+    business logic
+end note
+
+@enduml 

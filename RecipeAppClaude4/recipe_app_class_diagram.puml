@@ -1,0 +1,272 @@
+@startuml Recipe Application Class Diagram
+
+title Recipe Application - Class Diagram
+
+!define ENTITY class
+!define CONTROLLER class
+!define VIEW class
+!define MODEL class
+
+package "Tizen.NUI Framework" {
+    class NUIApplication {
+        +OnCreate()
+        +OnTerminate()
+        +Run()
+    }
+    
+    class View {
+        +Size: Size
+        +Position: Position
+        +BackgroundColor: Color
+        +TouchEvent: EventHandler
+        +Add(View)
+        +Remove(View)
+    }
+    
+    class Window {
+        +Title: string
+        +BackgroundColor: Color
+        +KeyEvent: EventHandler
+        +Add(View)
+        +Remove(View)
+    }
+}
+
+package "Application Layer" {
+    ENTITY Program {
+        -mainWindow: Window
+        -splashScreen: SplashScreen
+        -isMainAppLoaded: bool
+        +Main(string[])
+        +OnCreate()
+        -InitializeSplashScreen()
+        -OnSplashComplete()
+        -InitializeMainApp()
+        -OnKeyEvent()
+        -ShowToast(string)
+    }
+}
+
+package "UI Layer" {
+    VIEW SplashScreen {
+        -TARGET_WIDTH: float
+        -TARGET_HEIGHT: float
+        -onComplete: Action
+        -animationTimer: Timer
+        -logoImage: ImageView
+        -loadingAnimation: Animation
+        +SplashScreen(Action)
+        +Initialize()
+        +StartLoadingAnimation()
+        +Cleanup()
+    }
+    
+    VIEW HomePage {
+        -TARGET_WIDTH: float
+        -TARGET_HEIGHT: float
+        -currentImageIndex: int
+        -currentCategoryIndex: int
+        -categoryImages: string[][]
+        -categoryTitles: string[][]
+        -categoryDescriptions: string[][]
+        -carouselImageView: ImageView
+        -carouselTitleLabel: TextLabel
+        -carouselDescriptionLabel: TextLabel
+        -leftMaskGroup: ImageView
+        -rightMaskGroup: ImageView
+        -appetizersLabel: TextLabel
+        -entreesLabel: TextLabel
+        -dessertLabel: TextLabel
+        -underline: View
+        +HomePage()
+        -Initialize()
+        -UpdateCurrentCategoryData()
+        -SwitchToCategory(int)
+        -NextCarouselImage()
+        -UpdateCarouselContent()
+        -UpdateTabStyling()
+        -ShowMenuPage()
+        -ShowToast(string)
+        -GetResourcePath(string): string
+        -OnCarouselTouch(): bool
+    }
+    
+    VIEW MenuPage {
+        -TARGET_WIDTH: float
+        -TARGET_HEIGHT: float
+        -MENU_ITEM_LINE_HEIGHT: float
+        -TOAST_DISPLAY_DURATION: int
+        +MenuPage()
+        -Initialize()
+        -GetResourcePath(string): string
+        -OnMenuItemTouch(): bool
+        -ShowToast(string)
+        -CloseMenu()
+    }
+}
+
+package "Controller Layer" {
+    CONTROLLER RecipeController {
+        -_instance: RecipeController {static}
+        -_recipes: List<RecipeModel>
+        -_currentRecipeIndex: int
+        -_currentCategory: RecipeCategory
+        +Instance: RecipeController {static}
+        +OnRecipeChanged: Action<RecipeModel>
+        +OnCategoryChanged: Action<RecipeCategory>
+        +OnRecipeFavoriteToggled: Action<RecipeModel>
+        -RecipeController()
+        -InitializeRecipes()
+        +GetRecipesByCategory(RecipeCategory): List<RecipeModel>
+        +GetCurrentRecipe(): RecipeModel
+        +GetNextRecipe(): RecipeModel
+        +GetPreviousRecipe(): RecipeModel
+        +NextRecipe()
+        +SwitchCategory(RecipeCategory)
+        +ToggleFavorite(RecipeModel)
+        +GetFavoriteRecipes(): List<RecipeModel>
+        +GetCurrentCategory(): RecipeCategory
+        +GetCurrentRecipeIndex(): int
+        +GetAllRecipes(): List<RecipeModel>
+        +SearchRecipes(string): List<RecipeModel>
+    }
+    
+    CONTROLLER MenuController {
+        -_instance: MenuController {static}
+        -_menuItems: List<MenuItemModel>
+        +Instance: MenuController {static}
+        +OnMenuItemSelected: Action<MenuItemModel>
+        -MenuController()
+        -InitializeMenuItems()
+        +GetMenuItems(): List<MenuItemModel>
+        +HandleMenuSelection(string)
+        +GetMenuItemByName(string): MenuItemModel
+    }
+}
+
+package "Model Layer" {
+    MODEL RecipeModel {
+        +Id: string
+        +Title: string
+        +Description: string
+        +ImagePath: string
+        +PreparationTimeMinutes: int
+        +Calories: int
+        +Servings: int
+        +Category: RecipeCategory
+        +Rating: int
+        +IsFavorite: bool
+        +RecipeModel()
+        +RecipeModel(string, string, string, int, int, int, RecipeCategory)
+        +GetFormattedTime(): string
+    }
+    
+    MODEL MenuItemModel {
+        +Id: string
+        +Name: string
+        +IconPath: string
+        +IsEnabled: bool
+        +MenuItemModel()
+        +MenuItemModel(string, string, bool)
+    }
+    
+    enum RecipeCategory {
+        Appetizers = 0
+        Entrees = 1
+        Desserts = 2
+    }
+}
+
+package "Utility Layer" {
+    class Styles {
+        +Colors: ColorsClass {static}
+        +Typography: TypographyClass {static}
+        +Spacing: SpacingClass {static}
+        +BorderRadius: BorderRadiusClass {static}
+        +ApplyToastStyle(View, float, float) {static}
+        +ApplyToastLabelStyle(TextLabel, string) {static}
+        +ApplyButtonStyle(View) {static}
+        +ApplyCardStyle(View) {static}
+    }
+    
+    class ColorsClass {
+        +Primary: Color {static}
+        +Secondary: Color {static}
+        +Background: Color {static}
+        +OnPrimary: Color {static}
+        +Error: Color {static}
+        +Success: Color {static}
+    }
+    
+    class TypographyClass {
+        +HeaderSize: float {static}
+        +BodySize: float {static}
+        +CaptionSize: float {static}
+        +BoldFont: string {static}
+        +MediumFont: string {static}
+        +RegularFont: string {static}
+    }
+}
+
+' Inheritance relationships
+Program --|> NUIApplication
+SplashScreen --|> View
+HomePage --|> View
+MenuPage --|> View
+
+' Composition relationships
+Program *-- SplashScreen : creates
+Program *-- HomePage : creates
+HomePage *-- MenuPage : creates
+
+' Aggregation relationships
+RecipeController o-- RecipeModel : manages
+MenuController o-- MenuItemModel : manages
+
+' Dependencies
+HomePage ..> RecipeController : uses
+MenuPage ..> MenuController : uses
+HomePage ..> Styles : uses
+MenuPage ..> Styles : uses
+SplashScreen ..> Styles : uses
+
+' Association relationships
+RecipeModel --> RecipeCategory : categorized by
+HomePage --> RecipeController : subscribes to events
+MenuPage --> MenuController : subscribes to events
+
+' Multiplicity
+RecipeController ||--o{ RecipeModel : "1" *-- "*"
+MenuController ||--o{ MenuItemModel : "1" *-- "*"
+HomePage ||--|| RecipeController : "1" -- "1"
+MenuPage ||--|| MenuController : "1" -- "1"
+
+note right of Program
+    Entry point of the application.
+    Manages application lifecycle,
+    window creation, and navigation
+    between splash and main screens.
+end note
+
+note right of RecipeController
+    Singleton pattern implementation.
+    Manages all recipe data and
+    business logic. Publishes events
+    for UI updates.
+end note
+
+note right of HomePage
+    Main UI component that displays
+    recipe carousel, category tabs,
+    and handles user interactions.
+    Subscribes to RecipeController events.
+end note
+
+note bottom of RecipeModel
+    Data model representing a recipe
+    with all its properties including
+    nutritional information and
+    user preferences.
+end note
+
+@enduml 

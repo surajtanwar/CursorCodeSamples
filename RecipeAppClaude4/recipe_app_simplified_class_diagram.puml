@@ -1,0 +1,210 @@
+@startuml Recipe Application Simplified Class Diagram
+
+title Recipe Application - Simplified Class Diagram (Core Classes Only)
+
+skinparam class {
+    BackgroundColor<<Entity>> LightYellow
+    BackgroundColor<<Controller>> LightBlue
+    BackgroundColor<<View>> LightGreen
+    BackgroundColor<<Model>> LightPink
+    BackgroundColor<<Utility>> LightGray
+}
+
+class Program <<Entity>> {
+    -mainWindow: Window
+    -splashScreen: SplashScreen
+    -isMainAppLoaded: bool
+    ==
+    +Main(string[])
+    +OnCreate()
+    -InitializeSplashScreen()
+    -OnSplashComplete()
+    -InitializeMainApp()
+    -OnKeyEvent()
+    -ShowToast(string)
+}
+
+class SplashScreen <<View>> {
+    -TARGET_WIDTH: float
+    -TARGET_HEIGHT: float
+    -onComplete: Action
+    -animationTimer: Timer
+    ==
+    +SplashScreen(Action)
+    +Initialize()
+    +StartLoadingAnimation()
+    +Cleanup()
+}
+
+class HomePage <<View>> {
+    -currentImageIndex: int
+    -currentCategoryIndex: int
+    -categoryImages: string[][]
+    -categoryTitles: string[][]
+    -categoryDescriptions: string[][]
+    -carouselImageView: ImageView
+    -carouselTitleLabel: TextLabel
+    ==
+    +HomePage()
+    -Initialize()
+    -UpdateCurrentCategoryData()
+    -SwitchToCategory(int)
+    -NextCarouselImage()
+    -UpdateCarouselContent()
+    -UpdateTabStyling()
+    -ShowMenuPage()
+    -ShowToast(string)
+    -OnCarouselTouch(): bool
+}
+
+class MenuPage <<View>> {
+    -TARGET_WIDTH: float
+    -TARGET_HEIGHT: float
+    -MENU_ITEM_LINE_HEIGHT: float
+    ==
+    +MenuPage()
+    -Initialize()
+    -OnMenuItemTouch(): bool
+    -ShowToast(string)
+    -CloseMenu()
+}
+
+class RecipeController <<Controller>> {
+    -_instance: RecipeController {static}
+    -_recipes: List<RecipeModel>
+    -_currentRecipeIndex: int
+    -_currentCategory: RecipeCategory
+    ==
+    +Instance: RecipeController {static}
+    +OnRecipeChanged: Action<RecipeModel>
+    +OnCategoryChanged: Action<RecipeCategory>
+    +OnRecipeFavoriteToggled: Action<RecipeModel>
+    ==
+    -RecipeController()
+    -InitializeRecipes()
+    +GetRecipesByCategory(): List<RecipeModel>
+    +GetCurrentRecipe(): RecipeModel
+    +GetNextRecipe(): RecipeModel
+    +NextRecipe()
+    +SwitchCategory(RecipeCategory)
+    +ToggleFavorite(RecipeModel)
+    +GetFavoriteRecipes(): List<RecipeModel>
+    +SearchRecipes(string): List<RecipeModel>
+}
+
+class MenuController <<Controller>> {
+    -_instance: MenuController {static}
+    -_menuItems: List<MenuItemModel>
+    ==
+    +Instance: MenuController {static}
+    +OnMenuItemSelected: Action<MenuItemModel>
+    ==
+    -MenuController()
+    -InitializeMenuItems()
+    +GetMenuItems(): List<MenuItemModel>
+    +HandleMenuSelection(string)
+    +GetMenuItemByName(string): MenuItemModel
+}
+
+class RecipeModel <<Model>> {
+    +Id: string
+    +Title: string
+    +Description: string
+    +ImagePath: string
+    +PreparationTimeMinutes: int
+    +Calories: int
+    +Servings: int
+    +Category: RecipeCategory
+    +Rating: int
+    +IsFavorite: bool
+    ==
+    +RecipeModel()
+    +RecipeModel(params)
+    +GetFormattedTime(): string
+}
+
+class MenuItemModel <<Model>> {
+    +Id: string
+    +Name: string
+    +IconPath: string
+    +IsEnabled: bool
+    ==
+    +MenuItemModel()
+    +MenuItemModel(string, string, bool)
+}
+
+enum RecipeCategory <<Model>> {
+    Appetizers = 0
+    Entrees = 1
+    Desserts = 2
+}
+
+class Styles <<Utility>> {
+    +Colors: ColorsClass {static}
+    +Typography: TypographyClass {static}
+    +Spacing: SpacingClass {static}
+    +BorderRadius: BorderRadiusClass {static}
+    ==
+    +ApplyToastStyle() {static}
+    +ApplyToastLabelStyle() {static}
+    +ApplyButtonStyle() {static}
+    +ApplyCardStyle() {static}
+}
+
+' Main composition relationships
+Program *--> SplashScreen : creates
+Program *--> HomePage : creates
+HomePage *--> MenuPage : creates
+
+' Controller relationships (Singleton pattern)
+HomePage --> RecipeController : uses singleton
+MenuPage --> MenuController : uses singleton
+
+' Data relationships
+RecipeController o--> RecipeModel : manages *
+MenuController o--> MenuItemModel : manages *
+RecipeModel --> RecipeCategory : categorized by
+
+' Utility dependencies
+HomePage ..> Styles : uses
+MenuPage ..> Styles : uses
+SplashScreen ..> Styles : uses
+
+' Event subscriptions (Observer pattern)
+HomePage .up.> RecipeController : subscribes to\nevents
+MenuPage .up.> MenuController : subscribes to\nevents
+
+' Lifecycle relationships
+Program ..> HomePage : lifecycle
+Program ..> SplashScreen : lifecycle
+
+note top of RecipeController
+    **Singleton Pattern**
+    - Single instance manages all recipe data
+    - Publishes events for UI updates
+    - Implements business logic for recipes
+end note
+
+note top of HomePage
+    **Main UI Component**
+    - Displays recipe carousel
+    - Handles category switching
+    - Manages user interactions
+    - Subscribes to controller events
+end note
+
+note bottom of RecipeModel
+    **Data Model**
+    - Represents recipe information
+    - Includes nutritional data
+    - Tracks user preferences (favorites)
+end note
+
+note right of Program
+    **Application Entry Point**
+    - Manages app lifecycle
+    - Coordinates splash → main flow
+    - Handles window management
+end note
+
+@enduml 

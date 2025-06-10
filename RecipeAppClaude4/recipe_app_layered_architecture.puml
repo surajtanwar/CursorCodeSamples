@@ -1,0 +1,241 @@
+@startuml Recipe Application Layered Architecture
+
+title Recipe Application - Layered Architecture Diagram
+
+skinparam rectangle {
+    BackgroundColor<<PresentationLayer>> #E8F5E8
+    BackgroundColor<<BusinessLayer>> #E8F0FF
+    BackgroundColor<<DataLayer>> #FFE8F0
+    BackgroundColor<<InfrastructureLayer>> #F0F0F0
+    BackgroundColor<<PlatformLayer>> #FFF8E1
+    BorderColor Black
+    FontSize 12
+    FontStyle bold
+}
+
+skinparam arrow {
+    Color Black
+    Thickness 2
+}
+
+' Define the layered architecture
+package "Recipe Application - Layered Architecture" {
+
+    ' Presentation Layer (Top Layer)
+    rectangle "Presentation Layer" <<PresentationLayer>> {
+        rectangle "Application Entry Point" as AppEntry {
+            component "Program.cs" as Program
+        }
+        
+        rectangle "User Interface Components" as UILayer {
+            component "SplashScreen" as SplashScreen
+            component "HomePage" as HomePage  
+            component "MenuPage" as MenuPage
+        }
+        
+        rectangle "View Models & UI State" as ViewModels {
+            component "Category State" as CategoryState
+            component "Carousel State" as CarouselState
+            component "Menu State" as MenuState
+        }
+    }
+
+    ' Business Layer
+    rectangle "Business Logic Layer" <<BusinessLayer>> {
+        rectangle "Application Services" as AppServices {
+            component "Recipe Service" as RecipeService
+            component "Menu Service" as MenuService
+        }
+        
+        rectangle "Domain Controllers" as DomainControllers {
+            component "RecipeController\n(Singleton)" as RecipeController
+            component "MenuController\n(Singleton)" as MenuController
+        }
+        
+        rectangle "Business Rules & Logic" as BusinessLogic {
+            component "Recipe Management" as RecipeManagement
+            component "Category Logic" as CategoryLogic
+            component "Search Logic" as SearchLogic
+            component "Favorite Management" as FavoriteManagement
+        }
+        
+        rectangle "Event Management" as EventMgmt {
+            component "Recipe Events" as RecipeEvents
+            component "Menu Events" as MenuEvents
+            component "UI Events" as UIEvents
+        }
+    }
+
+    ' Data Access Layer
+    rectangle "Data Access Layer" <<DataLayer>> {
+        rectangle "Repository Interfaces" as RepoInterfaces {
+            component "IRecipeRepository" as IRecipeRepo
+            component "IMenuRepository" as IMenuRepo
+        }
+        
+        rectangle "Repository Implementations" as RepoImpl {
+            component "RecipeRepository" as RecipeRepo
+            component "MenuRepository" as MenuRepo
+        }
+        
+        rectangle "Data Models" as DataModels {
+            component "RecipeModel" as RecipeModel
+            component "MenuItemModel" as MenuItemModel
+            component "RecipeCategory" as RecipeCategory
+        }
+        
+        rectangle "Data Storage" as DataStorage {
+            component "In-Memory Store" as InMemoryStore
+            component "Static Data Provider" as StaticData
+        }
+    }
+
+    ' Infrastructure Layer (Cross-cutting)
+    rectangle "Infrastructure Layer" <<InfrastructureLayer>> {
+        rectangle "Cross-Cutting Concerns" as CrossCutting {
+            component "Logging" as Logging
+            component "Error Handling" as ErrorHandling
+            component "Configuration" as Configuration
+        }
+        
+        rectangle "Utilities & Helpers" as Utilities {
+            component "Styles & Theming" as Styles
+            component "Resource Management" as ResourceMgmt
+            component "Image Processing" as ImageProcessing
+            component "Animation Helpers" as AnimationHelpers
+        }
+    }
+
+    ' Platform Layer (Bottom Layer)
+    rectangle "Platform Layer" <<PlatformLayer>> {
+        rectangle "Tizen NUI Framework" as TizenNUI {
+            component "NUIApplication" as NUIApplication
+            component "View System" as ViewSystem
+            component "Event System" as EventSystem
+            component "Animation System" as AnimationSystem
+        }
+        
+        rectangle "Tizen Platform APIs" as TizenAPIs {
+            component "Resource APIs" as ResourceAPIs
+            component "Lifecycle APIs" as LifecycleAPIs
+            component "Hardware APIs" as HardwareAPIs
+        }
+        
+        rectangle "External Resources" as ExternalRes {
+            component "Images & Assets" as Assets
+            component "Fonts" as Fonts
+            component "Configuration Files" as ConfigFiles
+        }
+    }
+}
+
+' Layer Dependencies (Top-down flow)
+' Presentation Layer dependencies
+Program --> RecipeController : uses
+Program --> MenuController : uses
+SplashScreen --> Styles : uses
+HomePage --> RecipeController : subscribes to
+HomePage --> Styles : uses
+MenuPage --> MenuController : subscribes to
+MenuPage --> Styles : uses
+
+' Business Layer dependencies
+RecipeController --> RecipeRepo : uses
+MenuController --> MenuRepo : uses
+RecipeService --> RecipeManagement : implements
+MenuService --> BusinessLogic : implements
+RecipeController --> RecipeEvents : publishes
+MenuController --> MenuEvents : publishes
+
+' Data Access Layer dependencies
+RecipeRepo --> RecipeModel : manages
+MenuRepo --> MenuItemModel : manages
+RecipeRepo --> InMemoryStore : accesses
+MenuRepo --> StaticData : accesses
+
+' Infrastructure dependencies (cross-cutting)
+Program --> ErrorHandling : uses
+RecipeController --> Logging : uses
+MenuController --> ErrorHandling : uses
+HomePage --> ResourceMgmt : uses
+MenuPage --> ResourceMgmt : uses
+
+' Platform Layer dependencies
+Program --> NUIApplication : inherits
+SplashScreen --> ViewSystem : extends
+HomePage --> ViewSystem : extends
+MenuPage --> ViewSystem : extends
+ResourceMgmt --> ResourceAPIs : uses
+Program --> LifecycleAPIs : uses
+
+' Notes explaining layer responsibilities
+note right of UILayer
+    **Presentation Layer Responsibilities:**
+    • User interface rendering
+    • User interaction handling
+    • UI state management
+    • View logic and presentation
+    • Navigation between screens
+end note
+
+note right of DomainControllers
+    **Business Layer Responsibilities:**
+    • Application business logic
+    • Domain rules enforcement
+    • Data validation
+    • Business workflows
+    • Event coordination
+end note
+
+note right of RepoImpl
+    **Data Access Layer Responsibilities:**
+    • Data persistence abstraction
+    • CRUD operations
+    • Data mapping
+    • Query optimization
+    • Data integrity
+end note
+
+note right of CrossCutting
+    **Infrastructure Layer Responsibilities:**
+    • Cross-cutting concerns
+    • Utility functions
+    • Configuration management
+    • Resource management
+    • Common services
+end note
+
+note right of TizenNUI
+    **Platform Layer Responsibilities:**
+    • Framework services
+    • Platform APIs
+    • Hardware abstraction
+    • System resources
+    • External dependencies
+end note
+
+' Dependency Rules
+note top of Program
+    **Dependency Rules:**
+    • Higher layers depend on lower layers
+    • Lower layers should not depend on higher layers
+    • Dependencies flow downward only
+    • Infrastructure layer can be used by all layers
+    • Interfaces are used to invert dependencies
+end note
+
+' Legend
+note bottom
+    **Layer Communication:**
+    → Direct dependency (allowed)
+    ⚠ Cross-layer dependency (should be avoided)
+    ✓ Interface-based dependency (preferred)
+    
+    **Design Principles:**
+    • Separation of Concerns
+    • Dependency Inversion
+    • Single Responsibility
+    • Open/Closed Principle
+end note
+
+@enduml 

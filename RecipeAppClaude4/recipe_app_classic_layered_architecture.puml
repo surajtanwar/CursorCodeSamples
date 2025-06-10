@@ -1,0 +1,205 @@
+@startuml Recipe Application Classic Layered Architecture
+
+title Recipe Application - Classic Layered Architecture
+
+skinparam backgroundColor White
+
+' Define custom colors for each layer
+skinparam rectangle {
+    BackgroundColor<<Layer1>> #E8F5E8
+    BackgroundColor<<Layer2>> #E8F0FF  
+    BackgroundColor<<Layer3>> #FFE8F0
+    BackgroundColor<<Layer4>> #F0F0F0
+    BackgroundColor<<Layer5>> #FFF8E1
+    BorderColor Black
+    BorderThickness 2
+    FontSize 14
+    FontStyle bold
+}
+
+' Layer 1 - Presentation Layer (Top)
+rectangle "PRESENTATION LAYER" <<Layer1>> {
+    rectangle "UI Components" as UI {
+        [Program.cs]
+        [SplashScreen]
+        [HomePage] 
+        [MenuPage]
+    }
+    rectangle "UI State Management" as UIState {
+        [Category State]
+        [Carousel State]
+        [Menu State]
+    }
+}
+
+' Layer 2 - Business Logic Layer
+rectangle "BUSINESS LOGIC LAYER" <<Layer2>> {
+    rectangle "Application Services" as Services {
+        [Recipe Service]
+        [Menu Service]
+    }
+    rectangle "Domain Controllers" as Controllers {
+        [RecipeController]
+        [MenuController]
+    }
+    rectangle "Business Rules" as Rules {
+        [Recipe Management]
+        [Category Logic]
+        [Search Logic]
+        [Favorite Management]
+    }
+    rectangle "Event System" as Events {
+        [Recipe Events]
+        [Menu Events]
+        [UI Events]
+    }
+}
+
+' Layer 3 - Data Access Layer
+rectangle "DATA ACCESS LAYER" <<Layer3>> {
+    rectangle "Repository Pattern" as Repositories {
+        [IRecipeRepository]
+        [IMenuRepository]
+        [RecipeRepository]
+        [MenuRepository]
+    }
+    rectangle "Data Models" as Models {
+        [RecipeModel]
+        [MenuItemModel]
+        [RecipeCategory]
+    }
+    rectangle "Data Storage" as Storage {
+        [In-Memory Store]
+        [Static Data Provider]
+    }
+}
+
+' Layer 4 - Infrastructure Layer (Cross-cutting)
+rectangle "INFRASTRUCTURE LAYER" <<Layer4>> {
+    rectangle "Cross-Cutting Concerns" as CrossCutting {
+        [Logging]
+        [Error Handling]
+        [Configuration]
+    }
+    rectangle "Utilities" as Utils {
+        [Styles & Theming]
+        [Resource Management]
+        [Image Processing]
+        [Animation Helpers]
+    }
+}
+
+' Layer 5 - Platform Layer (Bottom)
+rectangle "PLATFORM LAYER" <<Layer5>> {
+    rectangle "Tizen Framework" as Framework {
+        [NUIApplication]
+        [View System]
+        [Event System]
+        [Animation System]
+    }
+    rectangle "Platform APIs" as APIs {
+        [Resource APIs]
+        [Lifecycle APIs]
+        [Hardware APIs]
+    }
+    rectangle "External Resources" as External {
+        [Images & Assets]
+        [Fonts]
+        [Config Files]
+    }
+}
+
+' Dependencies between layers (downward flow only)
+UI --|> Controllers : "calls methods"
+UIState --|> Events : "subscribes to"
+
+Controllers --|> Services : "uses"
+Services --|> Rules : "implements"
+Controllers --|> Repositories : "accesses data through"
+Events --|> Models : "carries data of"
+
+Repositories --|> Models : "manages"
+Repositories --|> Storage : "persists to"
+
+' Cross-cutting dependencies (Infrastructure can be used by all layers)
+UI ..> Utils : "uses styling & resources"
+Controllers ..> CrossCutting : "uses logging & error handling"
+Repositories ..> CrossCutting : "uses configuration"
+
+' Platform dependencies (all upper layers depend on platform)
+UI --|> Framework : "inherits from"
+Utils --|> APIs : "uses platform services"
+Storage --|> External : "accesses files & assets"
+
+' Layer descriptions
+note right of UI
+    **Layer 1: Presentation**
+    • User Interface Components
+    • View Logic
+    • User Interaction Handling
+    • State Management
+    • Navigation
+end note
+
+note right of Controllers
+    **Layer 2: Business Logic**
+    • Application Services
+    • Domain Controllers
+    • Business Rules & Validation
+    • Workflow Orchestration
+    • Event Publishing
+end note
+
+note right of Repositories
+    **Layer 3: Data Access**
+    • Repository Pattern
+    • Data Models
+    • CRUD Operations
+    • Data Persistence
+    • Query Logic
+end note
+
+note right of CrossCutting
+    **Layer 4: Infrastructure**
+    • Cross-Cutting Concerns
+    • Utilities & Helpers
+    • Configuration
+    • Common Services
+    • Resource Management
+end note
+
+note right of Framework
+    **Layer 5: Platform**
+    • Framework Services
+    • Platform APIs
+    • Hardware Abstraction
+    • External Dependencies
+    • System Resources
+end note
+
+' Architectural principles
+note top
+    **Layered Architecture Principles:**
+    ✓ Dependencies flow downward only
+    ✓ Each layer only knows about the layer directly below
+    ✓ Higher layers use services of lower layers
+    ✓ Lower layers should not depend on higher layers
+    ✓ Infrastructure layer provides cross-cutting concerns
+end note
+
+' Benefits of layered architecture
+note bottom
+    **Benefits:**
+    • Clear Separation of Concerns
+    • Maintainable and Testable Code
+    • Technology Independence
+    • Reusable Components
+    • Scalable Architecture
+    
+    **Trade-offs:**
+    • Performance overhead (multiple layers)
+    • Potential over-engineering for simple apps
+    • Rigid structure can limit flexibility
+end note
+
+@enduml 

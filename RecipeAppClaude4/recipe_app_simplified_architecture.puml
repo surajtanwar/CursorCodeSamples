@@ -1,0 +1,123 @@
+@startuml Recipe Application Simplified Architecture
+
+title Recipe Application - Simplified Architecture Overview
+
+skinparam component {
+    BackgroundColor<<UI>> LightGreen
+    BackgroundColor<<Controller>> LightBlue
+    BackgroundColor<<Model>> LightPink
+    BackgroundColor<<Framework>> LightYellow
+    BorderColor Black
+    FontSize 12
+}
+
+' Define the main architectural layers
+package "Tizen Platform" <<Framework>> {
+    [Tizen NUI Framework] as TNF
+    [Tizen APIs] as TAPI
+}
+
+package "Presentation Layer" <<UI>> {
+    component [Program.cs\n(Entry Point)] as PROG
+    component [SplashScreen\n(Loading UI)] as SPLASH
+    component [HomePage\n(Main UI)] as HOME
+    component [MenuPage\n(Navigation)] as MENU
+}
+
+package "Business Layer" <<Controller>> {
+    component [RecipeController\n(Singleton)] as RCTRL
+    component [MenuController\n(Singleton)] as MCTRL
+    component [Event System\n(Observer Pattern)] as EVENTS
+}
+
+package "Data Layer" <<Model>> {
+    component [RecipeModel\n(Data Structure)] as RMODEL
+    component [MenuItemModel\n(Data Structure)] as MMODEL
+    component [In-Memory Storage\n(Static Data)] as STORAGE
+}
+
+package "Infrastructure" {
+    component [Styles\n(UI Theming)] as STYLES
+    component [Resource Manager\n(Assets & Images)] as RESOURCES
+}
+
+' Framework relationships
+PROG --> TNF : inherits from\nNUIApplication
+SPLASH --> TNF : extends View
+HOME --> TNF : extends View
+MENU --> TNF : extends View
+
+PROG --> TAPI : uses lifecycle\nand resources
+
+' Application flow relationships
+PROG --> SPLASH : creates and\nmanages
+PROG --> HOME : creates after\nsplash complete
+HOME --> MENU : creates on\nmenu button
+
+' Controller relationships
+HOME --> RCTRL : subscribes to\nevents and calls methods
+MENU --> MCTRL : subscribes to\nevents and calls methods
+
+' Data relationships
+RCTRL --> RMODEL : manages\ncollection of
+MCTRL --> MMODEL : manages\ncollection of
+RCTRL --> STORAGE : reads/writes\nrecipe data
+MCTRL --> STORAGE : reads\nmenu configuration
+
+' Event relationships
+RCTRL --> EVENTS : publishes\nrecipe events
+MCTRL --> EVENTS : publishes\nmenu events
+EVENTS --> HOME : notifies UI\nupdates needed
+EVENTS --> MENU : notifies UI\nupdates needed
+
+' Infrastructure relationships
+HOME --> STYLES : applies\nUI styling
+MENU --> STYLES : applies\nUI styling
+SPLASH --> STYLES : applies\nUI styling
+
+HOME --> RESOURCES : loads\nimages and icons
+MENU --> RESOURCES : loads\nimages and icons
+RESOURCES --> TAPI : uses Tizen\nresource APIs
+
+' Data flow annotations
+note top of EVENTS
+    **Event-Driven Architecture**
+    Controllers publish events when data changes,
+    UI components subscribe and update accordingly.
+    Enables loose coupling and reactive UI.
+end note
+
+note right of RCTRL
+    **Business Logic Hub**
+    - Recipe CRUD operations
+    - Category management
+    - Search functionality
+    - Favorite tracking
+    - State management
+end note
+
+note bottom of STORAGE
+    **Data Storage Strategy**
+    Currently uses in-memory storage
+    with static initialization.
+    Can be extended to persistent
+    storage (database, files, cloud).
+end note
+
+note left of HOME
+    **Main User Interface**
+    - Recipe carousel display
+    - Category tab navigation
+    - Touch gesture handling
+    - Dynamic content updates
+    - Menu integration
+end note
+
+' Flow directions with different arrow styles
+PROG ==> SPLASH : 1. App Launch
+SPLASH ==> HOME : 2. Loading Complete
+HOME <==> RCTRL : 3. User Interactions
+RCTRL ==> EVENTS : 4. State Changes
+EVENTS ==> HOME : 5. UI Updates
+
+@enduml 

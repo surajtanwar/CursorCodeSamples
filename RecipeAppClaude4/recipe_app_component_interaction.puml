@@ -1,0 +1,161 @@
+@startuml Recipe Application Component Interactions
+
+title Recipe Application - Component Interactions & Data Flow
+
+skinparam node {
+    BackgroundColor LightBlue
+    BorderColor DarkBlue
+}
+
+skinparam database {
+    BackgroundColor LightPink
+    BorderColor DarkRed
+}
+
+' Define the main components as nodes
+node "User Interface Layer" {
+    rectangle "Program" as prog {
+        [Application Entry Point]
+        [Window Management]
+        [Lifecycle Control]
+    }
+    
+    rectangle "Views" as views {
+        [SplashScreen]
+        [HomePage] 
+        [MenuPage]
+    }
+}
+
+node "Business Logic Layer" {
+    rectangle "Controllers" as controllers {
+        [RecipeController\n(Singleton)] as RC
+        [MenuController\n(Singleton)] as MC
+    }
+    
+    rectangle "Event Hub" as events {
+        [OnRecipeChanged]
+        [OnCategoryChanged]
+        [OnFavoriteToggled]
+        [OnMenuItemSelected]
+    }
+}
+
+node "Data Layer" {
+    database "Models" as models {
+        [RecipeModel]
+        [MenuItemModel]
+        [RecipeCategory]
+    }
+    
+    database "Storage" as storage {
+        [Recipe Collection]
+        [Menu Items]
+        [Application State]
+    }
+}
+
+node "Infrastructure" {
+    rectangle "Cross-Cutting" as infra {
+        [Styles & Theming]
+        [Resource Management]
+        [Error Handling]
+    }
+}
+
+node "Tizen Platform" {
+    rectangle "Framework" as framework {
+        [NUI Components]
+        [Event System]
+        [Resource APIs]
+    }
+}
+
+' Data flow relationships with detailed labels
+prog --> views : creates & manages\nUI components
+views --> controllers : method calls\n(GetCurrentRecipe, NextRecipe, etc.)
+controllers --> models : instantiates &\nmanipulates data
+controllers --> storage : reads/writes\napplication data
+controllers --> events : publishes events\nwhen state changes
+events --> views : notifies subscribers\nof data updates
+views --> infra : uses styling &\nresource loading
+views --> framework : inherits from &\nuses NUI components
+
+' Specific interaction flows
+HomePage --> RC : User touches carousel\n→ NextRecipe()
+RC --> [OnRecipeChanged] : Recipe index updated\n→ publish event
+[OnRecipeChanged] --> HomePage : Event received\n→ UpdateCarouselContent()
+
+HomePage --> RC : User selects category\n→ SwitchCategory()
+RC --> [OnCategoryChanged] : Category updated\n→ publish event
+[OnCategoryChanged] --> HomePage : Event received\n→ UpdateTabStyling()
+
+MenuPage --> MC : User touches menu item\n→ HandleMenuSelection()
+MC --> [OnMenuItemSelected] : Menu action\n→ publish event
+[OnMenuItemSelected] --> MenuPage : Event received\n→ ShowToast()
+
+' Data access patterns
+RC --> [Recipe Collection] : CRUD operations\n(Create, Read, Update, Delete)
+RC --> [Application State] : maintains current\nrecipe & category indices
+MC --> [Menu Items] : reads menu\nconfiguration data
+
+' Cross-cutting concerns
+views --> [Styles & Theming] : applies consistent\nUI appearance
+views --> [Resource Management] : loads images,\nicons, fonts
+controllers --> [Error Handling] : handles exceptions\n& edge cases
+
+' Platform integration
+views --> [NUI Components] : uses ImageView,\nTextLabel, etc.
+views --> [Event System] : handles touch events,\nkey events
+infra --> [Resource APIs] : accesses Tizen\nresource system
+
+' Notes explaining key patterns
+note top of events
+    **Observer Pattern Implementation**
+    Events enable loose coupling between
+    business logic and UI components.
+    When data changes, events are published
+    and all subscribers are notified.
+end note
+
+note right of controllers
+    **Singleton Pattern Benefits**
+    Single instances ensure:
+    • Consistent state management
+    • Global access to business logic
+    • Efficient resource usage
+    • Thread-safe operations
+end note
+
+note bottom of storage
+    **Current Storage Strategy**
+    In-memory storage with static data:
+    • Fast access and updates
+    • Simple implementation
+    • Data lost on app restart
+    • Suitable for demo/prototype
+    
+    **Future Enhancement Options:**
+    • Local database (SQLite)
+    • File-based persistence
+    • Cloud synchronization
+end note
+
+note left of views
+    **UI Component Responsibilities**
+    • User interaction handling
+    • Visual state management
+    • Event subscription/unsubscription
+    • Resource loading and cleanup
+    • Animation and transitions
+end note
+
+' Legend for arrow types
+note bottom
+    **Arrow Legend:**
+    ──> Method calls and direct dependencies
+    ═=> Data flow and major interactions
+    ╱╱> Event publishing and notifications
+end note
+
+@enduml 
