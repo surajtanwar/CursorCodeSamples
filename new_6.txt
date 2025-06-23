@@ -1,0 +1,25 @@
+
+Test Case Generation Guide:
+The testcases for the program must be written in the testCase.txt file.
+Format of the testcase file:
+1. The first line of the test case file id the SDB target IP on the PC where test is running 
+2. The second line of the testcase file is LOOP, N where N is the number of the iterations for which you want to run the test cases.
+3.The next lines are the actual testcases. Each testcase is a single line containing the input values seperated by commas.
+	- The first value is always the name of the test case which will appear in the result table.
+	- There are 10 types of commands currently supported by the program.
+		-- APP: The command launches an application in the device. It is followed by the name of the application to be launched. For example-  APP, homescreen - will launch the homescreen. Currently only two apps are supported: homescreen and settings.
+		-- CLICK: This command taps the elements on the screen using text. It is followed by the text of the element to be clicked. For example- CLICK, OK - will click on the element with text 'OK'.If there are multiple elements with the same text, it will click on the first one found. If multiple elements need to be clicked subsequently, there is no need to type 'CLICK' again.Just porvide the text of the element to be clicked. For Example if we have to click on 'OK' and then 'CANCEL', we can write "CLICK, OK, CANCEL" instead of "CLICK, OK, CLICK, CANCEL".
+		--CHECK: This command check if text is present on the screen. It is followed by the text to be clicked. For example "CHECK, Finished" will check if the text 'Finished' is present on the screen or not.
+		--SLEEP: This command make the program wait for a certain amount of time before executing the next command. It is followed by the time on seconds to wait. For Example - 'SLEEP, 5' will make the program wait for 5 seconds before executing the next command.
+		--SWIPE: This command swipes the screen in the given direciton. It support four directions : UP, DOWN, LEFT and RIGHT. It is followd by the direction to swipe. For example- SWIPE UP.
+		--CLICK_COORDS: This commands clicks the screen at the given coordinates. It is followed by the x and y coordinates of the point to be clicked.For example - 'CLICK_COORDS, 100, 200' will click on the point (100,200) on the screen.
+		--CLICK_SCRL:This command find an element on the screen. It takes four parameters: The Xpath of the root element on which the scroll need to be done , the direction where to scroll, The count of scroll to be done untill the element to be found and the text of the element to find. For example -'CLICK_SCRL, root element XPATH, DOWN, 2, Recipe' will scroll down twice the listview element and click on the first element with the text "Recipe" that appears.
+		--NCHECK: This command checks if a text is NOT present on the screen.
+		--CHECK_STATE:This command is used to check any property of an element and match with the expected value. It takes 3 parameters: The text or xpath of the element whose properties need to be checked, the name of the property and the expected value.For Example- 'CHECK_STATE, More cycles, IsClickable, true' will check if the 'More cycles' element is clickable.
+		--IMG_COMPARE: This command compares the current image of an element with the reference image provided. It takes two parameters: The path of the reference image and the name/ xpath of the element to be compared with the image. For Example- 'IMG_COMPARE, ./images/settings.png./com.example.ma.settings./Layer/SettingRoot/Layout' will compare the current image of the settings page with the reference image settings.png.
+
+Example - 
+Checking Course Change1, APP, homescreen, CLICK, More cycles, E Cotton, APP, homescreen, CHECK, E Cotton
+
+The test case will appear as 'Checking Course Change1'in the result table. It will first launch the homescreen app, then click on the element with the name 'More cycles' then click on the element with  the text 'E Cotton' then launch the homescreen app again and finally check if the text E cotton is present in the screen.
+Note- Do not put any extra whitespace after the keywordin the testcase file. For Example 'CLICK,  Ok' is correct but 'CLICK ,Ok' is incorret.		
